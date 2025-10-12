@@ -1,1 +1,11 @@
+# Ignore macOS system files
 .DS_Store
+
+# Ignore data and generated files
+data/
+models/
+reports/figures/
+*.bak
+*.csv
+.ipynb_checkpoints/
+
