@@ -1,15 +1,29 @@
 stages:
   run_notebook:
     cmd: >
-      papermill
+      bash -lc "mkdir -p data/processed models reports/figures &&
+      python -m papermill
       notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
-      notebooks/mlops-eq16_notebooks_phase1_team16_out.ipynb
+      notebooks/mlops-eq16_notebooks_phase1_team16_out.ipynb"
     deps:
       - notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
       - data/raw
       - params.yaml
     outs:
-      - data/processed
-      - models
+      - data/processed/student_entry_performance_eda.csv:
+          persist: true
+      - data/processed/student_performance_binary_preprocessed.csv:
+          persist: true
+      - data/processed/student_performance_cleaned.csv:
+          persist: true
+      - data/processed/student_performance_encoded.csv:
+          persist: true
+      - data/processed/student_performance_test.csv:
+          persist: true
+      - data/processed/student_performance_train.csv:
+          persist: true
+      - models:
+          persist: true
       - reports/figures:
           persist: true
+
