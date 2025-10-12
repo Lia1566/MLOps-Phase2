@@ -9,3 +9,4 @@ reports/figures/
 *.csv
 .ipynb_checkpoints/
 
+/models

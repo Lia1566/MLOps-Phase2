@@ -26,4 +26,3 @@ stages:
           persist: true
       - reports/figures:
           persist: true
-

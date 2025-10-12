@@ -1,0 +1,55 @@
+schema: '2.0'
+stages:
+  run_notebook:
+    cmd: "bash -lc \"mkdir -p data/processed models reports/figures && python -m papermill
+      notebooks/mlops-eq16_notebooks_phase1_team16.ipynb notebooks/mlops-eq16_notebooks_phase1_team16_out.ipynb\"\
+      \n"
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 00b239a329df515787855a4c3e78c490.dir
+      size: 53647
+      nfiles: 1
+    - path: notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
+      hash: md5
+      md5: 06253265d0cb1a1cf1f00a6749a848aa
+      size: 801858
+    - path: params.yaml
+      hash: md5
+      md5: 4eb6562a923418c97ce7791d8101cc41
+      size: 143
+    outs:
+    - path: data/processed/student_entry_performance_eda.csv
+      hash: md5
+      md5: e54c65edadfcfdd67e240117785ff29b
+      size: 53646
+    - path: data/processed/student_performance_binary_preprocessed.csv
+      hash: md5
+      md5: 1ad16ccd954a3c8a0f5b4f11a4d001a9
+      size: 134650
+    - path: data/processed/student_performance_cleaned.csv
+      hash: md5
+      md5: 3a5e071cd99c0766938400dce87e2fbd
+      size: 51359
+    - path: data/processed/student_performance_encoded.csv
+      hash: md5
+      md5: 3a5e071cd99c0766938400dce87e2fbd
+      size: 51359
+    - path: data/processed/student_performance_test.csv
+      hash: md5
+      md5: 4afd85d610556b627ccc7a64f47998b6
+      size: 27605
+    - path: data/processed/student_performance_train.csv
+      hash: md5
+      md5: 7bc198ed2fc769ea40217cef428f647f
+      size: 107749
+    - path: models
+      hash: md5
+      md5: d8703cdf6e0c055e61f07f58f323b4ad.dir
+      size: 26
+      nfiles: 1
+    - path: reports/figures
+      hash: md5
+      md5: 20ecfcc542c202dc8de7813a77c0e4a2.dir
+      size: 6446803
+      nfiles: 17
