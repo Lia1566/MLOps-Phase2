@@ -32,7 +32,7 @@ data:
   handle_missing: true
   
   # File names
-  raw_file: student_performance.csv
+  raw_file: student_entry_performance_original.csv
   train_file: student_performance_train.csv
   test_file: student_performance_test.csv
 
