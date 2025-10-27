@@ -1,8 +1,8 @@
-preprocess:
+preprocessing:
   test_size: 0.2
+  random_state: 42
   scaler: "standard"
+
 model:
-  algo: "RandomForestClassifier"
-  n_estimators: 200
-  max_depth: 12
-random_state: 42
+  algorithm: "SVM"
+  random_state: 42

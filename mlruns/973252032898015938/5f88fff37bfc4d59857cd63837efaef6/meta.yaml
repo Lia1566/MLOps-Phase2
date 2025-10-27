@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/973252032898015938/5f88fff37bfc4d59857cd63837efaef6/artifacts
+end_time: 1761244837455
+entry_point_name: ''
+experiment_id: '973252032898015938'
+lifecycle_stage: active
+run_id: 5f88fff37bfc4d59857cd63837efaef6
+run_name: K-Nearest Neighbors_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761244834491
+status: 3
+tags: []
+user_id: lia

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase2/mlruns/172627299860881523/2b04b0bce88041eb880af148ed8b852f/artifacts
+end_time: 1761438342221
+entry_point_name: ''
+experiment_id: '172627299860881523'
+lifecycle_stage: active
+run_id: 2b04b0bce88041eb880af148ed8b852f
+run_name: Logistic Regression_pipeline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761438338764
+status: 4
+tags: []
+user_id: lia

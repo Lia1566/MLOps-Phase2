@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase2/mlruns/172627299860881523/2aca047a9c224356a908fc9954603a85/artifacts
+end_time: 1761438604469
+entry_point_name: ''
+experiment_id: '172627299860881523'
+lifecycle_stage: active
+run_id: 2aca047a9c224356a908fc9954603a85
+run_name: Gradient Boosting_pipeline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761438600694
+status: 3
+tags: []
+user_id: lia

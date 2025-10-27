@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/153978673892613470/4c25ccc23aa846cdb4580825fd456131/artifacts
+end_time: 1761259652373
+entry_point_name: ''
+experiment_id: '153978673892613470'
+lifecycle_stage: active
+run_id: 4c25ccc23aa846cdb4580825fd456131
+run_name: Random Forest_rank_1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761259652362
+status: 3
+tags: []
+user_id: lia

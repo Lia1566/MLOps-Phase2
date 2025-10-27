@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/973252032898015938/29163acf29b8463e81233893541838ea/artifacts
+end_time: 1761243881338
+entry_point_name: ''
+experiment_id: '973252032898015938'
+lifecycle_stage: active
+run_id: 29163acf29b8463e81233893541838ea
+run_name: SVM_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761243879425
+status: 3
+tags: []
+user_id: lia

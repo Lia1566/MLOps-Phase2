@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/153978673892613470/e2e413e3d5954b1d98f16db3b61a335e/artifacts
+end_time: 1761259594289
+entry_point_name: ''
+experiment_id: '153978673892613470'
+lifecycle_stage: active
+run_id: e2e413e3d5954b1d98f16db3b61a335e
+run_name: Logistic Regression_rank_2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761259594283
+status: 3
+tags: []
+user_id: lia

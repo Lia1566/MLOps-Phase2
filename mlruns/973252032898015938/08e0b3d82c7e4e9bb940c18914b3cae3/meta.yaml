@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/973252032898015938/08e0b3d82c7e4e9bb940c18914b3cae3/artifacts
+end_time: 1761244733633
+entry_point_name: ''
+experiment_id: '973252032898015938'
+lifecycle_stage: active
+run_id: 08e0b3d82c7e4e9bb940c18914b3cae3
+run_name: Gradient Boosting_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761244730457
+status: 3
+tags: []
+user_id: lia

@@ -1,0 +1,164 @@
+# ML Project Configuration File
+# This file contains all configuration parameters for the machine learning project
+
+project:
+  name: student_performance_prediction
+  version: 1.0.0
+  description: Student performance prediction using machine learning
+  author: Your Name
+  date_created: 2025-10-24
+
+# Project paths
+paths:
+  project_root: .
+  data: data
+  models: models
+  reports: reports
+  mlflow: mlruns
+  logs: logs
+
+# Data configuration
+data:
+  # Target variable
+  target_column: Performance_Binary
+  
+  # Train-test split
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+  
+  # Feature engineering
+  scale_features: true
+  handle_missing: true
+  
+  # File names
+  raw_file: student_performance.csv
+  train_file: student_performance_train.csv
+  test_file: student_performance_test.csv
+
+# Training configuration
+training:
+  # Cross-validation
+  cv_folds: 5
+  random_state: 42
+  
+  # Parallel processing
+  n_jobs: -1
+  
+  # Verbosity
+  verbose: 1
+  
+  # Model selection
+  baseline_models:
+    - Logistic Regression
+    - Random Forest
+    - Gradient Boosting
+    - SVM
+    - K-Nearest Neighbors
+    - Decision Tree
+  
+  # Top models to tune (select after baseline training)
+  top_n_models: 3
+
+# Model hyperparameters for tuning
+models:
+  logistic_regression:
+    C: [0.001, 0.01, 0.1, 1, 10, 100]
+    penalty: [l2]
+    solver: [lbfgs, liblinear, saga]
+    max_iter: 1000
+    random_state: 42
+  
+  random_forest:
+    n_estimators: [50, 100, 200]
+    max_depth: [5, 10, 15, null]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+    random_state: 42
+    n_jobs: -1
+  
+  gradient_boosting:
+    n_estimators: [50, 100, 200]
+    learning_rate: [0.01, 0.1, 0.2]
+    max_depth: [3, 5, 7]
+    min_samples_split: [2, 5]
+    random_state: 42
+  
+  svm:
+    C: [0.1, 1, 10, 100]
+    kernel: [linear, rbf]
+    gamma: [scale, auto]
+    probability: true
+    random_state: 42
+  
+  k_neighbors:
+    n_neighbors: [3, 5, 7, 9]
+    weights: [uniform, distance]
+    metric: [euclidean, manhattan]
+  
+  decision_tree:
+    max_depth: [5, 10, 15, 20, null]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+    random_state: 42
+
+# MLflow configuration
+mlflow:
+  # Experiment names
+  baseline_experiment: student_performance_baseline
+  tuning_experiment: student_performance_tuning
+  final_experiment: student_performance_final
+  
+  # Tracking URI (null = use local mlruns directory)
+  tracking_uri: null
+  
+  # What to log
+  log_models: true
+  log_metrics: true
+  log_params: true
+  log_artifacts: true
+  
+  # Auto-logging
+  autolog: false
+
+# Evaluation configuration
+evaluation:
+  # Metrics to calculate
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+    - specificity
+  
+  # Performance thresholds
+  threshold_accuracy: 0.70
+  threshold_f1: 0.70
+  threshold_precision: 0.65
+  threshold_recall: 0.65
+  
+  # Class names for reports
+  class_names:
+    - Lower Performance
+    - High Performance
+  
+  # Visualization settings
+  plot_confusion_matrix: true
+  plot_roc_curve: true
+  plot_pr_curve: true
+  plot_feature_importance: true
+  top_n_features: 20
+
+# Logging configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/training.log
+  console: true
+
+# Reproducibility
+seed:
+  numpy: 42
+  random: 42
+  torch: 42  # if using PyTorch

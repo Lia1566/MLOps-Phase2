@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/973252032898015938/4cfd097de268459ea311cb2d9e788b7f/artifacts
+end_time: 1761243885688
+entry_point_name: ''
+experiment_id: '973252032898015938'
+lifecycle_stage: active
+run_id: 4cfd097de268459ea311cb2d9e788b7f
+run_name: Decision Tree_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761243883491
+status: 3
+tags: []
+user_id: lia

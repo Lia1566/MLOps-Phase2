@@ -1,0 +1,86 @@
+================================================================================
+SCIKIT-LEARN PIPELINE DOCUMENTATION
+================================================================================
+
+Pipeline Structure:
+--------------------------------------------------------------------------------
+1. Preprocessing Step:
+   - StandardScaler: Standardizes features by removing mean and scaling to unit variance
+   - Formula: z = (x - mean) / std
+   - Benefits: Ensures all features are on the same scale
+
+2. Model Training Step:
+   - Various algorithms: Logistic Regression, Random Forest, SVM, etc.
+   - Each model trained on preprocessed data
+   - Hyperparameters logged to MLflow
+
+3. Cross-Validation:
+   - 5-fold stratified cross-validation
+   - Ensures robust performance estimates
+   - Maintains class distribution in each fold
+
+================================================================================
+TRAINED PIPELINES
+================================================================================
+
+1. Logistic Regression
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6960
+Test F1-Score: 0.6415
+CV Score: 0.7143 (+/- 0.0537)
+
+2. Random Forest
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6960
+Test F1-Score: 0.6481
+CV Score: 0.6398 (+/- 0.0397)
+
+3. SVM
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6960
+Test F1-Score: 0.6346
+CV Score: 0.6801 (+/- 0.0665)
+
+4. K-Nearest Neighbors
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6800
+Test F1-Score: 0.6429
+CV Score: 0.6255 (+/- 0.0580)
+
+5. Gradient Boosting
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6640
+Test F1-Score: 0.6316
+CV Score: 0.6760 (+/- 0.0318)
+
+6. Decision Tree
+Pipeline: StandardScaler + Model
+Test Accuracy: 0.6240
+Test F1-Score: 0.5524
+CV Score: 0.6017 (+/- 0.0359)
+
+================================================================================
+BEST PIPELINE
+================================================================================
+
+Model: Logistic Regression
+Test Accuracy: 0.6960
+Test F1-Score: 0.6415
+Saved to: /Users/lia/Desktop/Fase2/models/best_pipeline_baseline.pkl
+
+================================================================================
+REPRODUCIBILITY
+================================================================================
+
+To reproduce these results:
+
+1. Load the pipeline:
+   from src.models.pipeline import load_pipeline
+   pipeline = load_pipeline('/Users/lia/Desktop/Fase2/models/best_pipeline_baseline.pkl')
+
+2. Make predictions:
+   predictions = pipeline.predict(X_new)
+   probabilities = pipeline.predict_proba(X_new)
+
+The pipeline automatically handles preprocessing!
+

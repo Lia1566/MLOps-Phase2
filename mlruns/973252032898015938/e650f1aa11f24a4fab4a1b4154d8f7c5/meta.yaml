@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/973252032898015938/e650f1aa11f24a4fab4a1b4154d8f7c5/artifacts
+end_time: 1761244503050
+entry_point_name: ''
+experiment_id: '973252032898015938'
+lifecycle_stage: active
+run_id: e650f1aa11f24a4fab4a1b4154d8f7c5
+run_name: Logistic Regression_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761244497115
+status: 3
+tags: []
+user_id: lia

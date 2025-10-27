@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/153978673892613470/b4e7438bff634027a9c23d2531c0c44c/artifacts
+end_time: 1761259661553
+entry_point_name: ''
+experiment_id: '153978673892613470'
+lifecycle_stage: active
+run_id: b4e7438bff634027a9c23d2531c0c44c
+run_name: SVM_tuning_parent
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761259656371
+status: 3
+tags: []
+user_id: lia

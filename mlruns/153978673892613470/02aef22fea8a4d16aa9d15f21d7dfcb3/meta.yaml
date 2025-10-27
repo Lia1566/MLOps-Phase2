@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/153978673892613470/02aef22fea8a4d16aa9d15f21d7dfcb3/artifacts
+end_time: 1761259599478
+entry_point_name: ''
+experiment_id: '153978673892613470'
+lifecycle_stage: active
+run_id: 02aef22fea8a4d16aa9d15f21d7dfcb3
+run_name: Logistic Regression_tuning_parent
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761259587546
+status: 3
+tags: []
+user_id: lia

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/lia/Desktop/Fase1/mlruns/249874408524917802/f1065211ebb74c6db5496e3a6655d2c4/artifacts
+end_time: 1761262902455
+entry_point_name: ''
+experiment_id: '249874408524917802'
+lifecycle_stage: active
+run_id: f1065211ebb74c6db5496e3a6655d2c4
+run_name: final_evaluation_SVC
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761262902413
+status: 3
+tags: []
+user_id: lia

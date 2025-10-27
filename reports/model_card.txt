@@ -1,0 +1,58 @@
+
+================================================================================
+MODEL CARD
+================================================================================
+
+Model Information:
+-----------------
+Model Name: Pipeline
+Model Type: Pipeline
+Creation Date: 2025-10-27 15:58:50
+Model Path: models/best_pipeline_baseline.pkl
+
+Model Parameters:
+----------------
+{'memory': None, 'steps': [('preprocessor', Pipeline(steps=[('scaler', StandardScaler())])), ('model', LogisticRegression(max_iter=1000, random_state=42))], 'transform_input': None, 'verbose': False, 'preprocessor': Pipeline(steps=[('scaler', StandardScaler())]), 'model': LogisticRegression(max_iter=1000, random_state=42), 'preprocessor__memory': None, 'preprocessor__steps': [('scaler', StandardScaler())], 'preprocessor__transform_input': None, 'preprocessor__verbose': False, 'preprocessor__scaler': StandardScaler(), 'preprocessor__scaler__copy': True, 'preprocessor__scaler__with_mean': True, 'preprocessor__scaler__with_std': True, 'model__C': 1.0, 'model__class_weight': None, 'model__dual': False, 'model__fit_intercept': True, 'model__intercept_scaling': 1, 'model__l1_ratio': None, 'model__max_iter': 1000, 'model__multi_class': 'deprecated', 'model__n_jobs': None, 'model__penalty': 'l2', 'model__random_state': 42, 'model__solver': 'lbfgs', 'model__tol': 0.0001, 'model__verbose': 0, 'model__warm_start': False}
+
+Performance Metrics:
+-------------------
+Accuracy:       0.6960
+Precision:      0.6667
+Recall:         0.6182
+F1-Score:       0.6415
+Specificity:    0.7571
+ROC-AUC:        0.8105
+Avg Precision:  0.7735
+
+Confusion Matrix:
+----------------
+True Negatives:  53
+False Positives: 17
+False Negatives: 21
+True Positives:  34
+
+Error Analysis:
+--------------
+Total Errors:    38
+Error Rate:      0.3040
+FP Rate:         0.2429
+FN Rate:         0.3818
+
+Classification Report:
+---------------------
+                   precision    recall  f1-score   support
+
+Lower Performance     0.7162    0.7571    0.7361        70
+ High Performance     0.6667    0.6182    0.6415        55
+
+         accuracy                         0.6960       125
+        macro avg     0.6914    0.6877    0.6888       125
+     weighted avg     0.6944    0.6960    0.6945       125
+
+
+Assessment:
+----------
+Moderate performance. Consider additional tuning or feature engineering.
+Deployment Ready: No
+
+================================================================================
