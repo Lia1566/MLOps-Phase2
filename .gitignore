@@ -1,0 +1,123 @@
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Data files (too large for GitHub)
+data/raw/*.csv
+data/processed/*.csv
+data/external/*.csv
+*.csv
+
+# Model files (too large for GitHub)
+models/*.pkl
+models/*.joblib
+models/*.h5
+*.pkl
+*.joblib
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+
+# Environment variables
+.env
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Keep directory structure but ignore contents
+data/raw/.keep
+data/processed/.keep
+data/external/.keep
+models/.keep
+reports/figures/.keep
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
