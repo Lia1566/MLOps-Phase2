@@ -1,0 +1,20 @@
+stages:
+  run_notebook:
+    cmd: >
+      papermill
+      notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
+      notebooks/mlops-eq16_notebooks_phase1_team16_out.ipynb
+    deps:
+      - notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
+      - data/raw
+      - params.yaml
+    outs:
+      - data/processed/student_entry_performance_eda.csv
+      - data/processed/student_performance_binary_preprocessed.csv
+      - data/processed/student_performance_cleaned.csv
+      - data/processed/student_performance_encoded.csv
+      - data/processed/student_performance_test.csv
+      - data/processed/student_performance_train.csv
+      - models
+      - reports/figures:
+          persist: true

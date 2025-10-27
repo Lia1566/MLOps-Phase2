@@ -1,0 +1,67 @@
+================================================================================
+PREPROCESSING INFORMATION
+================================================================================
+
+Ordinal Encoding Applied:
+--------------------------------------------------------------------------------
+Class_X_Percentage:
+  Average → 1
+  Good → 2
+  Vg → 3
+  Excellent → 4
+
+Class_XII_Percentage:
+  Average → 1
+  Good → 2
+  Vg → 3
+  Excellent → 4
+
+time:
+  ONE → 1
+  TWO → 2
+  THREE → 3
+  FOUR_PLUS → 4
+
+One-Hot Encoding Applied:
+--------------------------------------------------------------------------------
+Original categorical features: ['Gender', 'Caste', 'coaching', 'Class_ten_education', 'twelve_education', 'medium', 'Father_occupation', 'Mother_occupation']
+Resulting binary features: 27
+
+Final Feature Set:
+--------------------------------------------------------------------------------
+Total features: 30
+All numeric: Yes
+
+Features:
+1. Class_X_Percentage_Encoded
+2. Class_XII_Percentage_Encoded
+3. time_Encoded
+4. Gender_male
+5. Caste_OBC
+6. Caste_SC
+7. Caste_ST
+8. coaching_OA
+9. coaching_WA
+10. Class_ten_education_OTHERS
+11. Class_ten_education_SEBA
+12. twelve_education_CBSE
+13. twelve_education_OTHERS
+14. medium_ENGLISH
+15. medium_OTHERS
+16. Father_occupation_BUSINESS
+17. Father_occupation_COLLEGE_TEACHER
+18. Father_occupation_CULTIVATOR
+19. Father_occupation_DOCTOR
+20. Father_occupation_ENGINEER
+21. Father_occupation_OTHERS
+22. Father_occupation_SCHOOL_TEACHER
+23. Mother_occupation_BUSINESS
+24. Mother_occupation_COLLEGE_TEACHER
+25. Mother_occupation_CULTIVATOR
+26. Mother_occupation_DOCTOR
+27. Mother_occupation_ENGINEER
+28. Mother_occupation_HOUSE_WIFE
+29. Mother_occupation_OTHERS
+30. Mother_occupation_SCHOOL_TEACHER
+
+================================================================================
