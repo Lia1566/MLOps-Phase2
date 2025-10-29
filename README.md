@@ -460,7 +460,7 @@ Best Pipeline Model: Logistic Regression
 #### Tuned Models (Hyperparameter Optimization)
 
 | Model | Test Acurracy | Test F1 | Best Parameters | CV Score
-|-----------|-----------|-----------| -----------| -----------| -----------| 
+|-----------|-----------|-----------| -----------| -----------|
 | SVM | 0.720 | 0.690 | C=1, kernel=linear, gamma=scale | 0.706 | 
 | Logistic Regression | 0.704 | 0.665 | C=1, penalty=l2, solver=liblinear | 0.714 | 
 | Random Forest| 0.688 | 0.652 | n_estimators=50, max_depth=5 | 0.692 | 
