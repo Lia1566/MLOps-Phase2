@@ -2,17 +2,22 @@
 
 **Student Performance Prediction - Refactorization and Pipelines**
 
-This project implemets a machine learning pipeline to predict student performance using various classification algorithms. The project demonstrates code refactorization, modular design, pipeline implementation, and experiment tracking with MLflow. 
+This project implemets a machine learning pipeline to predict student performance using various classification algorithms. The project demonstrates code refactorization, modular design, sklearn pipeline implementation, and experiment tracking with MLflow and DVC. 
 
 ## Table of Contents
 - Project Overview
 - Project Structure
 - Features
+- Team & Roles
 - Installation
 - Usage
+- DVC Pipieline
 - Results
+- MLflow Experiment Tracking
 - Techonology Used
+- Configuration
 - Contributions
+- Acknowledgements
 
 ## Project Overview
 
@@ -25,7 +30,9 @@ This project predicts whether students will achieve high performance (Excellent/
 The project focuses on:
 1. **Code Refactorization**: Transforming monolithic notebooks into modular, reusable code.
 2. **Pipeline Implementation**: Using Scikit-learn pipelines for reproducible ML workflows.
-3. **Experiment Tracking**: Comprehensive loggong with MLflow.
+3. **Experiment Tracking**: Comprehensive loggong with MLflow and DVC.
+4. **Model Versioning**: Track all models with versions, parameters, and metrics.
+5. **Reproducibility**: Ensure anyone can replicate experiments from scratch. 
 
 ## Project Structure
 
@@ -64,14 +71,21 @@ Fase 2/
 │   ├── train_model.py         # Train baseline models
 │   └── evaluate_model.py      # Model evaluation script
 │
-├── models/                     # Saved trained models (*.pkl)
+├── models/                     # Saved trained models (*.pkl, DVC tracked)
 ├── reports/                    # Results and documentation
 │   ├── figures/               # Visualization outputs
-│   └── *.csv                  # Results tables
+│   ├── baseline_results.csv    # Baseline model results
+│   ├── pipeline_baseline_results.csv  # Pipeline model results
+│   ├── tuning_results.csv      # Hyperparameter tuning results
+│   └── *.txt                  # Additional documentation
 │
 ├── mlruns/                     # MLflow experiment tracking
 ├── logs/                       # Training logs
 │
+├── dvc.yaml                       # DVC pipeline definition
+├── dvc.lock                       # DVC pipeline lock file
+├── params.yaml                    # DVC tracked parameters
+├── .dvc/                          # DVC configuration
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -90,32 +104,116 @@ Fase 2/
    - Prevents data leakage
    - Ensures reproducibility
    - Single object for deployment
+   - All preprocessing steps bundled with model
+  
+3. DVC Pipeline Automation
+   - Complete 4-sate pipeline: `prepare_data → train_baseline → train_pipeline → train_tuning`
+   - Automatic dependency tracking
+   - Reproducible experiments with `dvc repro`
+   - Data and model versioning
+   - Pipeline visualization with `dvc dag` 
 
-3. MLflow Experiment Tracking
+4. MLflow Experiment Tracking
    - Automatic logging of parameters and metrics
    - Model versioning and storage
    - Visual comparison of experiments
    - Reproducible results
+   - Model registry for production deployment
   
-4. Comprehensive Data Preprocessing
-   - Ordinal encoding for ordered categories
-   - One-hot encoding for nominal features
-   - Missing value handling
+5. Comprehensive Data Preprocessing
+   - Ordinal encoding for ordered categories (grades, times)
+   - One-hot encoding for nominal features (gender, caste, etc.)
+   - Missing value handling with median imputation
    - Train-test splitting with stratification
+   - Feature scaling with StandardScaler
   
-5. Multiple ML Algorithms
+6. Multiple ML Algorithms
    - Logistic Regression
    - Random Forest
    - Gradient Boosting
    - Support Vector Machine (SVM)
    - K-Nearest Neighbors
    - Decision Tree
+  
+## Team & Roles
+
+**Team 16 Members**
+| Name | Role | Responsabilities | 
+|-----------|-----------|-----------| 
+| Estaban Hidekel Solares Orozco | DevOps Engineer | CI/CD setup, infrastructure management, DVC configuration, version control |
+| Jesús Antonio López Wayas | Software Engineer | Code refactorization, modular architecture, code quality, testing | 
+| Natalia Nevarez Tinoco | Data Enfineer | Data pipeline, preprocessing, feature engineering, data quality |
+| Roberto López Baldomero | ML Engineer | Model training, hyperparameter tuning, pipeline implementation, MLflow setup | 
+| Yander Alec Ortega Rosales | Data Scientist | EDA, model selection, evaluation metrics, results analysis | 
+
+### Role Activities in Phase 2
+
+**DevOps Enginer** (Esteban Hidekel)
+- Set up DVC for data and model versioning
+- Configured `dvc.yaml` pipeline with 4 stages
+- Integrated DVC with Git workflow
+- Created `dvc_manager.py` utility for automation
+- Ensured reproducibility across envieronments
+
+**Software Engineer** (Jesús Antonio)
+- Refactored monolothic notebook code into modular structure
+- Created reusable functions in `scr/` modules
+- Implemented proper error handling and logging
+- Applied PEP 8 coding standards
+- Created command-line interfaces for scripts
+- Maintained code documentation
+
+**Data Engineer** (Natalia Nevarez)
+- Designed and implemented data preprocessing pipeline
+- Created `prepare_data.py` script with full automation
+- Implemented ordinal and one-hot encoding strategies
+- Handled missing values and data quality issues
+- Set up data versioning with DVC
+- Documented preprocessing steps
+- Managed GitHub repository and version control
+
+**ML Engineer** (Roberto López)
+- Implemented Scikit-Learn pipelines in `pipeline.py`
+- Set up MLflow experiment tracking
+- Created training scripts (`train_model.py`, `train_pipeline.py`)
+- Performed hyperparameters tuning with GridSearchCV
+- Integrated models with DVC versioning
+- Ensured model reproducbility
+
+**Data Scientist** (Ynader Alec)
+- Conduced exploratory data anylsis
+- Selected appropriate ML algorithms
+- Defined evaluation metrics and thresholds
+- Analyzed model results and created visualizations
+- Compared baseline vs. pipeline vs. tuned models
+- Documented findings and recommendations
+
+### Team Interactions & MLOps Workflow
+```
+Data Scientist → Data Engineer → ML Engineer → DevOps → Software Engineer
+     ↓               ↓               ↓            ↓            ↓
+   EDA & Model    Data Pipeline   Training &   DVC Setup   Code Quality
+   Selection      & Features      MLflow      & Versioning  & Refactor
+                                                             
+                  ← Feedback Loop & Iterations →
+
+```
+### Collaborative Workflow:
+1. Data Scientist analyzes data and selects models
+2. Data Enfineer builds preprocessing pipeline
+3. ML Engineer implements training and experiment tracking
+4. Software Engineer refactors code into modular structure
+5. DevOps Engineer sets up versioning and reproducibility
+6. Iteration: Team reviews results and improves together
+
 
 ## Installation
 
 ### Prerequisite
 - Python 3.8 or higher
 - pip package manager
+- Git
+- DVC (Data Version Control)
 
 ### Setup
 
@@ -127,150 +225,407 @@ cd Phase 2
 2. Create vistual environment (recommended)
 ```
 python -m venv venv
-source venv/bin/activate # on windows: venv\Scripts\activate
+source venv/bin/activate # On windows: venv\Scripts\activate
 ```
 3. Install dependencies
 ```
 pip install -r requirements.txt
 ```
-4. Create necessary directories
+4. Initialize DVC (if not already initialized)
+```
+dvc init
+```
+5. Pull data and modules (if using DVC remote)
+```
+dvc pull
+```
+6. Create necessary directories
 ```
 mkdir -p data/raw data/processed moodels reports/figures logs mlruns
 ```
 5. Add data
 - Place raw data file in `data/raw`
-- Named: `student_entry_performance_original.csv`
+- File name: `student_entry_performance_original.csv`
 
 ## Usage
 
-### Step 1. Prepare Data
+### Quick Start: Run Complete Pipelines
+```
+# Run all steps automatically
+dvc repro
+```
+This single command will:
+1. Prepare data (if needed)
+2. Train baseline models (if needed)
+3. Train pipeline models (if needed)
+4. Perform hyperparameters tuning (if needed)
+
+### Step-by-Step Usage
+
+#### Step 1. Prepare Data
 
 Preprocess raw data with encoding and splitting:
 ```
 python scripts/prepare_data.py
 ```
-This will:
-- Clean and deduplicate data
-- Create binary target variable
-- Encode ordinal features (grades, time)
-- One-hot encode categorical features
-- Split into train/test sets (80/20)
+With DVC tracking:
+```
+python scripts/prepare_data.py --track-with-dvc
+```
+
+Output:
+
+- Cleans and deduplicates data
+- Creates binary target variable
+- Encode ordinal features (grades, study time)
+- One-hot encodes categorical features
+- Splits into train/test sets (80/20)
 - Save processed data to `data/processed/`
 
-### Step 2. Train Models with Pipelines
-Train all baseline models with Scikit-learn pipelines:
+#### Step 2. Train Baseline Models
+Train models without pipelines:
+```
+python scripts/train_model.py --mode baseline
+```
+With DVC tracking:
+```
+python scripts/train_model.py --mode baseline --track-with-dvc
+```
+Output:
+- Trains 6 different algorithms
+- Performs 5 fold cross-validation
+- Logs experiments to MLflow
+- Saves all models to `models/`
+- Generates comparison visualization
+
+#### Step. 3 Train Models with Sklearn Pipelines
+Train models with preprocessing pipelines:
 ```
 python scripts/train_pipeline.py
 ```
-This will:
-- Train 6 different algorithms
-- Apply StandardScaler preprocessing
-- Perform 5-fold cross validation
-- Log experiments to MLflow
-- Save all trained pipelines to `models/`
-- Generate comparison visualizations
+With DVC tracking:
+```
+python scripts/train_pipeline.py --track-with-dvc
+```
+Output:
+- Trains 6 different with StandardScaler preprocessing
+- Each pipeline is a sing;e deployable object
+- Performs 5 fold cross-validation
+- Logs to MLflow
+- Saves pipeline to `models/`
+- Creates visualizations and documentation
 
-### Step 3. View MLflow UI
+#### Step 4. Hyperparameter Tuning
+Tune top 3 models:
+```
+python scripts/train_model.py --mode tuning --top-n 3
+```
+With DVC tracking:
+```
+python scripts/train_model.py --mode tuning --top-n 3 --track-with-dvc
+```
+Output:
+- Selects top 3 models from baseline
+- Performs GridSearchCV
+- Tests multiple parameter combinations
+- Saves best models
+- Logs all runs to MLflow
+
+#### Step 5. View MLflow UI
+
 Explore experiments and compare models:
 ```
 mlflow ui
 ```
 Then open browser to: `http://127.0.0.1:5000`
 
-### Step 4. Evaluate Best Model
-Evaluate a specific model in detal:
+#### Step 6. Evaluate Specific Model
+Detailed evaluation of a saved model:
 ```
-python scripts/evaluate_model.py --model models/best_pipeline_baseline.pkl
+python scripts/evaluate_model.py --models/best_pipeline_baseline.pkl
 ```
-This will create:
+Output:
 - Confusion matrix
 - ROC and PR curves
-- Feature importance
+- Features importance
 - Classification report
-- Model card
+- Model card with metadata
+
+## DVC Pipeline
+**Pipeline Stages**
+The project uses a 4-stages DVC pipeline for complete reproducibility:
+```
+data/raw.dvc
+     ↓
+prepare_data
+     ↓
+     ├─→ train_baseline → train_tuning
+     └─→ train_pipeline
+```
+### View Pipeline
+```
+# Show pipeline structure
+dvc dag
+
+# Check pipeline status
+dvc status
+
+# List all stages
+dvc stage list
+```
+### Run Pipeline
+
+```
+# Run entire pipeline
+dvc repro
+
+# Run specific stage
+dvc repro prepare_data
+dvc repro train_baseline
+dvc repro train_pipeline
+dvc repro train_tuning
+```
+
+### Pipeline Definition (`dvc.yaml`)
+
+Stage 1: prepare_data
+- Command: `python scripts/prepare_data.py --track-with-dvc`
+- Dependencies: Raw data, scripts, config
+- Outputs: Processed train/test CSV files
+- Parameters: test_size, random_state, stratify
+
+Stage 2: train_baseline
+- Command: `python scripts/train_model.py --mode baseline --track-with-dvc`
+- Dependencies: Processed data, training scripts
+- Outputs: Best baseline model, results CSV
+- Metrics: baseline_results.csv
+
+Stage 3: train_pipeline
+- Command: `python scripts/train_pipeline.py --track-with-dvc`
+- Dependencies: Processed data, pipelines scripts
+- Outputs: Best pipeline model, results CSV
+- Metrics: pipeline_baseline_results.csv
+
+Stage 4: train_tuning
+- Command: `python scripts/train_model.py --mode tuning --top-n 3 --track-with-dvc`
+- Dependencies: Processed data, baseline results
+- Outputs: Tuned models, tuning results CSV
+- Metrics: tuning_results.csv
+
+Benefits of DVC
+- Reproducibility: Anyone can run `dvc repro` to replicate experiments
+- Version Control: Track data and model versions alongside code
+- Efficiency: Only re-run stages when dependencies change
+- Collaboration: Share data and models without Git bloat
+- Automation: Define ML pipeline as code
 
 ## Results
 
 ### Model Performance Comparison
 
-| Model | Test Acurracy | Test F1 | Test Precision | Test Recall | CV Score
+Baseline Models (No Preprocessing Pipeline)
+
+| Model | Test Acurracy | Test F1 | Test Precision | Test Recall | CV Score (Mean ± Std)
 |-----------|-----------|-----------| -----------| -----------| -----------|
-| Logistic Regression | 0.696 | 0.642 | 0.667 | 0.618 | 0.714 |
-| Random Forest| 0.696 | 0.648 | 0.660 | 0.636 | 0.640 |
-| SVM | 0.696 | 0.635 | 0.673 | 0.600 | 0.680 | 
-| Gradient Boosting | 0.664 | 0.632 | 0.610 | 0.655 | 0.676 |
-| K-Nearest Neighbors | 0.680 | 0.643 | 0.632 | 0.655 | 0.625 |
-| Decision Tree | 0.624 | 0.552 | 0.580 | 0.527 | 0.602 |
+| SVM | 0.736 | 0.697 | 0.704 | 0.691 | 0.688 ± 0.061 | 
+| Logistic Regression | 0.712 | 0.660 | 0.686 | 0.636 | 0.712 ± 0.060 |
+| Random Forest| 0.696 | 0.648 | 0.660 | 0.636 | 0.640 ± 0.040 |
+| Gradient Boosting | 0.664 | 0.632 | 0.610 | 0.655 | 0.676 ± 0.032 |
+| K-Nearest Neighbors | 0.640 | 0.602 | 0.586 | 0.618 | 0.559 ± 0.025 |
+| Decision Tree | 0.624 | 0.552 | 0.580 | 0.527 | 0.598 ± 0.037 |
 
-**Best Model: Logistic Regression**
-- Best Accuracy: 69.6%
+**Best Model: SVM**
+- Best Accuracy: 73.6%
+- F1-Score: 69.7%
+- ROC-AUC: 82.1%
+- Cross-Validation: 68.8% (±6.1%)
+
+### Pipeline Models (With StandardScaler Preprocessing)
+
+| Model | Test Acurracy | Test F1 | Test Precision | Test Recall | CV Score (Mean ± Std)
+|-----------|-----------|-----------| -----------| -----------| -----------| 
+| Logistic Regression | 0.696 | 0.642 | 0.667 | 0.618 | 0.714 ± 0.054 |
+| Random Forest| 0.696 | 0.648 | 0.660 | 0.636 | 0.640 ± 0.040 |
+| SVM | 0.696 | 0.635 | 0.673 | 0.600 | 0.680 ± 0.067 |
+| K-Nearest Neighbors | 0.680 | 0.643 | 0.632 | 0.655 | 0.625 ± 0.058 |
+| Gradient Boosting | 0.664 | 0.632 | 0.610 | 0.655 | 0.676 ± 0.032 |
+| Decision Tree | 0.624 | 0.552 | 0.580 | 0.527 | 0.602 ± 0.036 |
+
+Best Pipeline Model: Logistic Regression
+- Test Accuracy: 69.6%
 - F1-Score: 64.2%
-- Cross-Validation: 7104% (±5.4%)
-- Training Time: 12.4 seconds
+- Cross Validation: 71.4% (±5.4%)
+- Structure: `StandardScaler → Logistic Regression`
 
-### Key Findings
-1. Three models (Logistic Regression, Random Forest, SVM) achieved identical test accuracy (69.6%)
-2. Logistic Regression won due to highest CV score and best generalization
-3. Decision Tree showed signs of overfitting with lowest performance
-4. All top models show balanced precision-recall trade offs
+Tuned Models (Hyperparameter Optimization)
+
+| Model | Test Acurracy | Test F1 | Best Parameters | CV Score
+|-----------|-----------|-----------| -----------| -----------| -----------| 
+| SVM | 0.720 | 0.690 | C=1, kernel=linear, gamma=scale | 0.706 | 
+| Logistic Regression | 0.704 | 0.665 | C=1, penalty=l2, solver=liblinear | 0.714 | 
+| Random Forest| 0.688 | 0.652 | n_estimators=50, max_depth=5 | 0.692 | 
+
+Best Tuned Models: SVM
+- Test Accuracy: 72.0%
+- F1-Score: 69.0%
+- Parameters: Linear kernel, C=1
+
+
+## Key Findings
+1. **Baseline SVM** achieved highest test accuracy (73.6%) without pipeline preprocessing
+2. Three models tied in pipeline comparison (Logistics Regression, Random Forest, SVM at 69.6%)
+3. **Logistic Regression** won pipeline comparison due to highest CV score and best generalization
+4. Hyperparamater tuning improved SVM to 72.0% accuracy
+5. Preprocessing pipelines show trade-off between accuracy and deployment simplicity
+6. All top models show balanced precision-recall trade-offs
+7. Decision Tree consistently showed lowest performance, indicating need for ensemble methods
+
+Recommendations
+- For deployment: Use Logistic Regression pipeline (simple, interpretable, reproducible)
+- For highest accuracy: Use Baseline SVM (73.6% test accuracy)
+- For production: Consider ensemble of top 3 models
+- Next steps: Feature engineering, more data collection, deep learning exploration
+
+## MLflow Experiment Tracking
+###View Experiments
+```
+# Start MLflow UI
+mlflow ui
+
+# Navigate to
+http://127.0.0.1:5000
+```
+
+### What's Tracked
+For each experiment, MLflow logs:
+- Parameters: All hyperparamters and configuration
+- Metrics: Accuracy, precision, recall, F1, ROC-AUC
+- Artifacts: Models, plots, confusion matrices
+- Tags: Model type, experiment name, timestamp
+- Environment: Python version, library versions
+
+### Experiment Organization
+- Baseline Experiment: `student_performance_baseline`
+- Pipeline Experiment: `student_performance_baseline_pipeline`
+- Tuning Experiment: `student_performance_tuning`
+
+### Model Registry
+All models are registered in MLflow with
+- Version number
+- Hyperparameters
+- Training metrics
+- Test metrics
+- Model artifacts (.pkl) files
+- Git commit hash
+- Timestamp
 
 ## Technologies Used
 **Core Libraries**
-- Python 3.12
+- Python 3.12 (Programming language)
 - scikit-learn 1.3+: Machine learning algorithms and pipelines
 - pandas: Data manipulation
 - numpy: Numerical operations
 
-**Experiment Tracking**
-- MLflow: Experiment tracking and model versioning
+**MLOps Tools**
+- MLflow: Experiment Tracking and model versioning
+- DVC: Data and pipeline versioning
+- Git: Source code version control
 
 **Visualization**
 -matplotlib: Statistic plot
 seaborn: Statistical visualization
 
-**Configuration**
+**Configuration & Utilities**
 - PyYAML: Configuration file management
-
-**Additional tool**
 - joblib: Model serialization
 - pathlib: Path handling
+
+**Additional Tools**
+- argparse: Command-line interfaces
+- logging: Application logging
+- pickle: Object serialization
 
 ## Configuration
 Project setting are managed in `config/config.yaml`
 
 ```
+# Project metadata
+project:
+  name: student_performance_prediction
+  version: 1.0.0
+
+# Data configuration
 data:
   target_column: Performance_Binary
   test_size: 0.2
   random_state: 42
+  stratify: true
 
+# Training configuration
 training:
   cv_folds: 5
+  random_state: 42
   n_jobs: -1
+  baseline_models:
+    - Logistic Regression
+    - Random Forest
+    - Gradient Boosting
+    - SVM
+    - K-Nearest Neighbors
+    - Decision Tree
+  top_n_models: 3
 
+# MLflow configuration
 mlflow:
-  experiment_name: student_performance_baseline_pipeline
-  tracking_uri: None # Uses local mlruns directory
+  baseline_experiment: student_performance_baseline
+  tuning_experiment: student_performance_tuning
+  tracking_uri: null  # Uses local mlruns directory
+  log_models: true
+  log_metrics: true
+  log_params: true
+
+# DVC configuration
+dvc:
+  remote:
+    name: myremote
+    url: null  # Set to your remote storage
+  track:
+    data: true
+    models: true
+    pipelines: true
+  versioning:
+    create_tags: true
+    tag_prefix: v
 
 ```
 MOdify this code to adjust project behaviour without changing code.
 
-## Contributors
+## Contributing
 
-- Esteban Hidekel Solares Orozco - DevOps
-- Jesús Antonio López Wayas - Software Enginner
-- Natalia Nevarez Tinoco - Data Engineer
-- Roberto López Baldomero - ML Engineer
-- Yander Alec Ortega Rosales - Data Scientist
+This project is part of an academic assignment for the MLOps course at Tecnológico de Monterrey.
 
-## Licence
-This project is part of an academic assignment
+### Team Contributors
+All team members contributed equally to different aspects of the project following MLOps best practices and role responsabilities. 
+
+### Git Workflow
+
+- Main branch: `main`
+- Feature branches: `features/feature-name`
+- Commit message format: `type: description`
+- All changes reviewd and merged via pull request
 
 ## Acknowledgments
 
 - Data source: https://archive.ics.uci.edu/dataset/582/student+performance+on+an+entrance+examination
 - Course: MLOps
 - Institution: Tecnologico de Monterrey
+- Semester: Fall 2025
+
+### References
+- Cookiecutter Data Science Template - https://cookiecutter-data-science.drivendata.org
+- MLflow Documentation - https://mlflow.org/docs/latest/index.html
+- DVC Documentation - https://dvc.org/doc
+- Scikit-learn Pipelines - https://scikit-learn.org/stable/modules/compose.html
 
 
 
