@@ -1,6 +1,5 @@
 [core]
     autostage = true
-    remote = localstore
 [cache]
     dir = cache
 ['remote "localstore"']

@@ -85,3 +85,6 @@ data/processed/.keep
 data/external/.keep
 models/.keep
 reports/figures/.keep
+
+# Google Cloud credentials (DO NOT COMMIT)
+gdrive-credentials.json
