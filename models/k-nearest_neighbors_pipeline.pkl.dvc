@@ -1,0 +1,5 @@
+outs:
+- md5: 4397040219332d623e1de474d4e546d0
+  size: 126463
+  hash: md5
+  path: k-nearest_neighbors_pipeline.pkl

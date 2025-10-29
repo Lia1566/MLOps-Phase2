@@ -40,6 +40,117 @@ from src.visualization.plots import (
     plot_training_comparison
 )
 
+# DVC integration
+try:
+    from src.utils.dvc_manager import DVCManager
+    DVC_AVAILABLE = True
+except ImportError:
+    print("Warning: DVC manager not available.")
+    DVC_AVAILABLE = False
+    
+def track_pipelines_with_dvc(config, trained_pipelines, results_df, use_dvc=True):
+    """
+    Track trained pipelines with DVC.
+    
+    Args:
+        config: Configuration object
+        trained_pipelines: Dictionary of trained pipelines
+        results_df: DataFrame with results
+        use_dvc: Whether to use DVC tracking
+    """
+    if not use_dvc or not DVC_AVAILABLE:
+        return
+    
+    print("\n" + "="*80)
+    print("DVC PIPELINE TRACKING")
+    print("="*80)
+    
+    try:
+        dvc = DVCManager(project_root=config.project_root)
+        
+        if not dvc.is_initialized():
+            print("Initializing DVC...")
+            dvc.initialize()
+        
+        # Track all pipeline files
+        print("\nTracking pipeline files with DVC...")
+        models_dir = config.models_dir
+        
+        tracked_count = 0
+        for pipeline_file in models_dir.glob('*_pipeline.pkl'):
+            print(f"Tracking: {pipeline_file.name}")
+            success = dvc.track_model(pipeline_file)
+            if success:
+                tracked_count += 1
+                print(f"    {pipeline_file.name} tracked")
+        
+        print(f"\nTracked {tracked_count} pipeline file(s)")
+        
+        # Track results files
+        print("\nTracking results files...")
+        results_file = config.reports_dir / 'pipeline_baseline_results.csv'
+        if results_file.exists():
+            dvc.track_file(results_file)
+            print(f"    {results_file.name} tracked")
+        
+        # Track documentation
+        doc_file = config.reports_dir / 'pipeline_documentation.txt'
+        if doc_file.exists():
+            dvc.track_file(doc_file)
+            print(f"    {doc_file.name} tracked")
+        
+        # Update params.yaml with pipeline parameters
+        print("\nUpdating parameters...")
+        best_pipeline_name = results_df.iloc[0]['Model']
+        pipeline_params = {
+            'pipeline': {
+                'algorithm': best_pipeline_name,
+                'preprocessing': 'StandardScaler',
+                'random_state': config.get('training.random_state', 42),
+                'best_accuracy': float(results_df.iloc[0]['Test Accuracy']),
+                'best_f1': float(results_df.iloc[0]['Test F1']),
+                'cv_mean': float(results_df.iloc[0]['CV Mean']),
+                'cv_std': float(results_df.iloc[0]['CV Std']),
+            }
+        }
+        dvc.update_params(pipeline_params)
+        print("Parameters updated")
+        
+        # Create a git tag for this pipeline training run
+        try:
+            import subprocess
+            from datetime import datetime
+            tag_name = f"pipeline-{best_pipeline_name.lower().replace(' ', '-')}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+            subprocess.run(
+                ['git', 'tag', '-a', tag_name, '-m', f'Pipeline training: {best_pipeline_name}'],
+                cwd=config.project_root,
+                capture_output=True,
+                check=False
+            )
+            print(f"\nGit tag created: {tag_name}")
+        except Exception as e:
+            print(f"\nCould not create git tag: {e}")
+        
+        # Show status
+        print("\nDVC Status:")
+        dvc.status()
+        
+        # Check for remotes
+        remotes = dvc.list_remotes()
+        if remotes:
+            print(f"\nDVC remote configured")
+            print("Push pipelines with: dvc push")
+        else:
+            print("\nNo DVC remote configured")
+            print("Pipelines are tracked locally only")
+        
+        print("\n" + "="*80)
+        print("DVC PIPELINE TRACKING COMPLETE")
+        print("="*80)
+        
+    except Exception as e:
+        print(f"\nDVC tracking failed: {e}")
+        print("Continuing without DVC tracking...")
 
 def setup_mlflow(config):
     """Setup MLflow tracking."""
@@ -207,8 +318,22 @@ def train_pipelines(config, args):
         f.write("   predictions = pipeline.predict(X_new)\n")
         f.write("   probabilities = pipeline.predict_proba(X_new)\n\n")
         f.write("The pipeline automatically handles preprocessing!\n\n")
+        
+        if args.track_with_dvc and DVC_AVAILABLE:
+            f.write("="*80 + "\n")
+            f.write("DVC TRACKING\n")
+            f.write("="*80 + "\n\n")
+            f.write("This pipeline is tracked with DVC for version control.\n\n")
+            f.write("To retrieve this version:\n")
+            f.write("  1. Checkout the git tag\n")
+            f.write("  2. Run: dvc checkout\n")
+            f.write("  3. The exact pipeline files will be restored\n\n")
     
     print(f"✓ Pipeline documentation saved to: {doc_path}")
+    
+    # DVC Tracking (if enabled)
+    if args.track_with_dvc:
+        track_pipelines_with_dvc(config, trained_pipelines, results_df, use_dvc=True)
     
     # Print summary
     print("\n" + "="*80)
@@ -231,10 +356,20 @@ def train_pipelines(config, args):
     print(f"  View UI: mlflow ui")
     print(f"  Navigate to: http://localhost:5000")
     
+    if args.track_with_dvc and DVC_AVAILABLE:
+        print(f"\nDVC:")
+        print(f"✓ Pipelines tracked with DVC")
+        print(f" Status: dvc status")
+        print(f" Push: dvc push")
+    
     print("\n" + "="*80)
     print("✓ All pipelines trained and saved successfully!")
     print("✓ Each pipeline includes preprocessing + model in a single object")
     print("✓ Pipelines are reproducible and ready for deployment")
+    
+    if args.track_with_dvc and DVC_AVAILABLE:
+        print("✓ Version controlled with DVC")
+        
     print("="*80 + "\n")
 
 
@@ -248,6 +383,9 @@ Examples:
   # Train baseline pipelines
   python scripts/train_pipeline.py
   
+  # Train baseline pipelines with DVC tracking
+  python scripts/train_pipeline.py --track-with-dvc
+  
   # Use custom config
   python scripts/train_pipeline.py --config my_config.yaml
   
@@ -257,6 +395,12 @@ What are Pipelines?
   - Prevents data leakage
   - Makes deployment easier
   - Improves reproducibility
+  
+What does DVC add?
+    - Version control for pipeline files
+    - Reproducibility across different environments
+    - Easy rollback to previous versions
+    - Collaboration with team members
         """
     )
     
@@ -265,6 +409,12 @@ What are Pipelines?
         type=str,
         default='config/config.yaml',
         help='Path to configuration file (default: config/config.yaml)'
+    )
+    
+    parser.add_argument(
+        '--track-with-dvc',
+        action='store_true',
+        help='Enable DVC tracking for pipelines and results'
     )
     
     args = parser.parse_args()

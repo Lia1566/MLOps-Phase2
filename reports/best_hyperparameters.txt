@@ -1,0 +1,15 @@
+BEST HYPERPARAMETERS
+================================================================================
+
+SVM:
+  Test Accuracy: 0.7200
+  Parameters: {'C': 1, 'gamma': 'scale', 'kernel': 'linear'}
+
+Logistic Regression:
+  Test Accuracy: 0.7120
+  Parameters: {'C': 1, 'penalty': 'l2', 'solver': 'liblinear'}
+
+Random Forest:
+  Test Accuracy: 0.6800
+  Parameters: {'max_depth': 5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 50}
+

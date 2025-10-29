@@ -1,0 +1,5 @@
+outs:
+- md5: a4ca9de0f4c6ceff2b9557630c36b260
+  size: 35924
+  hash: md5
+  path: decision_tree_pipeline.pkl

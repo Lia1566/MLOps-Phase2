@@ -1,0 +1,5 @@
+outs:
+- md5: 5f407e89a382b79b4806eba31e7c6cf5
+  size: 106454
+  hash: md5
+  path: svm_pipeline.pkl

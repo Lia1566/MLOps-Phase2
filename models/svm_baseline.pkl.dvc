@@ -1,0 +1,5 @@
+outs:
+- md5: c8bce64f345fec8f27af43fb75b247d4
+  size: 110203
+  hash: md5
+  path: svm_baseline.pkl

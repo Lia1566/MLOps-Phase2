@@ -1,0 +1,5 @@
+outs:
+- md5: fbad3baf1e5f22643db5ebbae0617915
+  size: 34713
+  hash: md5
+  path: decision_tree_baseline.pkl

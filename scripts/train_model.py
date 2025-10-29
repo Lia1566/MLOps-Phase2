@@ -30,6 +30,111 @@ from src.visualization.plots import (
     plot_training_comparison
 )
 
+# DVC Integration
+try:
+    from src.utils.dvc_manager import DVCManager
+    DVC_AVAILABLE = True
+except ImportError:
+    print("Warning: DVC manager is not available")
+    DVC_AVAILABLE = False
+    
+def track_models_with_dvc(config, trained_models, results_df, mode='baseline', use_dvc=True):
+    """
+    Track trained models with DVC.
+    
+    Args:
+        config: Configuration object
+        trained_models: Dictionary of trained models
+        results_df: DataFrame with results
+        mode: Training mode ('baseline' or 'tuning')
+        use_dvc: Whether to use DVC tracking
+    """
+    if not use_dvc or not DVC_AVAILABLE:
+        return
+    
+    print("\n" + "="*80)
+    print("DVC MODEL TRACKING")
+    print("="*80)
+    
+    try:
+        dvc = DVCManager(project_root=config.project_root)
+        
+        if not dvc.is_initialized():
+            print("Initializing DVC...")
+            dvc.initialize()
+        
+        # Track all model files
+        print("\nTracking model files with DVC...")
+        models_dir = config.models_dir
+        
+        tracked_count = 0
+        for model_file in models_dir.glob('*.pkl'):
+            print(f"Tracking: {model_file.name}")
+            success = dvc.track_model(model_file)
+            if success:
+                tracked_count += 1
+                print(f" {model_file.name} tracked")
+        
+        print(f"\nTracked {tracked_count} model file(s)")
+        
+        # Track results files
+        print("\nTracking results files...")
+        results_file = config.reports_dir / f'{mode}_results.csv'
+        if results_file.exists():
+            dvc.track_file(results_file)
+            print(f"    {results_file.name} tracked")
+        
+        # Update params.yaml with model parameters
+        print("\nUpdating parameters...")
+        best_model_name = results_df.iloc[0]['Model']
+        model_params = {
+            'model': {
+                'algorithm': best_model_name,
+                'mode': mode,
+                'random_state': config.get('training.random_state', 42),
+                'best_accuracy': float(results_df.iloc[0]['Test Accuracy']),
+                'best_f1': float(results_df.iloc[0]['Test F1']),
+            }
+        }
+        dvc.update_params(model_params)
+        print("Parameters updated")
+        
+        # Create a git tag for this training run
+        try:
+            import subprocess
+            from datetime import datetime
+            tag_name = f"{mode}-{best_model_name.lower().replace(' ', '-')}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+            subprocess.run(
+                ['git', 'tag', '-a', tag_name, '-m', f'{mode} training: {best_model_name}'],
+                cwd=config.project_root,
+                capture_output=True,
+                check=False
+            )
+            print(f"\nGit tag created: {tag_name}")
+        except Exception as e:
+            print(f"\nCould not create git tag: {e}")
+        
+        # Show status
+        print("\nDVC Status:")
+        dvc.status()
+        
+        # Check for remotes
+        remotes = dvc.list_remotes()
+        if remotes:
+            print(f"\nDVC remote configured")
+            print("Push models with: dvc push")
+        else:
+            print("\nNo DVC remote configured")
+            print("Models are tracked locally only")
+        
+        print("\n" + "="*80)
+        print("✓ DVC MODEL TRACKING COMPLETE")
+        print("="*80)
+        
+    except Exception as e:
+        print(f"\nDVC tracking failed: {e}")
+        print("Continuing without DVC tracking...")
+
 
 def setup_mlflow(config):
     """Setup MLflow tracking."""
@@ -121,6 +226,10 @@ def train_baseline(config, args):
         save_path=training_comp_path
     )
     
+    # DVC tracking (if enabled)
+    if args.track_with_dvc:
+        track_models_with_dvc(config, trained_models, results_df, mode='baseline', use_dvc=True)
+    
     # Print summary
     print("\n" + "="*80)
     print("BASELINE TRAINING COMPLETE")
@@ -131,6 +240,10 @@ def train_baseline(config, args):
     print(f"\nModels saved to: {config.models_dir}")
     print(f"Results saved to: {results_path}")
     print(f"Visualizations saved to: {config.figures_dir}")
+    
+    if args.track_with_dvc and DVC_AVAILABLE:
+        print(f"\nModels tracked with DVC")
+    
     print(f"\nView MLflow UI: mlflow ui")
     print("="*80 + "\n")
 
@@ -249,6 +362,10 @@ def train_tuned(config, args):
         save_path=comparison_path
     )
     
+    # DVC tracking (if enabled)
+    if args.track_with_dvc:
+        track_models_with_dvc(config, tuned_models, results_df, mode='tuning', use_dvc=True)
+    
     # Print summary
     print("\n" + "="*80)
     print("HYPERPARAMETER TUNING COMPLETE")
@@ -267,6 +384,8 @@ def train_tuned(config, args):
     print(f"\nModels saved to: {config.models_dir}")
     print(f"Results saved to: {results_path}")
     print(f"Visualizations saved to: {config.figures_dir}")
+    if args.track_with_dvc and DVC_AVAILABLE:
+        print(f"\nModels tracked with DVC")
     print(f"\nView MLflow UI: mlflow ui")
     print("="*80 + "\n")
 
@@ -309,6 +428,12 @@ Examples:
         type=int,
         default=None,
         help='Number of top models to tune (default: from config)'
+    )
+    
+    parser.add_argument(
+        '--track-with-dvc',
+        action='store_true',
+        help='Enable DVC tracking for models and results'
     )
     
     args = parser.parse_args()

@@ -39,7 +39,90 @@ from src.data.preprocessing import (
 )
 from src.features.engineering import get_ordinal_mappings, get_nominal_columns
 
+# DVC Integration
+try:
+    from src.utils.dvc_manager import DVCManager, create_dvcignore
+    DVC_AVAILABLE = True
+except ImportError:
+    print('Warning: DVC manager not available. Install it to enable DVC features.')
+    DVC_AVAILABLE = False
 
+def track_with_dvc(config, train_file, test_file, features_names_file, use_dvc=True):
+    """
+    Track processed data files with DVC for versioning. 
+    
+    Args:
+        config: Configuration object
+        train_file: Path to training data file
+        test_file: Path to test data file
+        features_names_file: Path to feature names file
+        use_dvc: Whether to use DVC tracking
+    """
+    if not use_dvc or not DVC_AVAILABLE:
+        return
+    
+    print("\n" + "="*80)
+    print('DVC TRACKING')
+    print("="*80)
+    
+    try:
+        # Initialize DVC manager
+        dvc = DVCManager(project_root=config.project_root)
+        
+        # Initialize DVC if not already done
+        if not dvc.is_initialized():
+            dvc.initialize()
+            create_dvcignore(config.project_root)
+            print("DVC initialized")
+            
+        print("\nTracking processed data files with DVC...")
+        
+        files_to_track = [train_file, test_file, features_names_file]
+        
+        for file_path in files_to_track:
+            if file_path.exists():
+                print(f" Tracking: {file_path.name}")
+                success = dvc.track_file(file_path, commit=True)
+                if success:
+                    print(f"  {file_path.name} tracked with DVC")
+                else:
+                    print(f"  Warning: {file_path.name} could not be tracked with DVC")
+        print(f"\nTracked {len(files_to_track)} file(s)")
+        
+        # Update params.yaml with preprocessing parameters
+        print("\nUpdating parameters in params.yaml...")
+        preprocessing_params = {
+            'preprocessing': {
+                'test_size': config.get('data.test_size', 0.2), 
+                'random_state': config.get('data.random_state', 42), 
+                'scaler': 'standard'
+            }
+        }
+        dvc.update_params(preprocessing_params)
+        print("Parameters updated")
+        
+        # Check remote and offer to push
+        remotes = dvc.list_remotes()
+        if remotes:
+            print(f"\nDVC remote configured: {remotes[0]}")
+            print("You can push data with: dvc push")
+        else:
+            print("\nNo DVC remote configured")
+            print("Configure one with: dvc remote add -d storage <url>")
+        
+        # Show status
+        print("\nDVC Status:")
+        dvc.status()
+        
+        print("\n" + "="*80)
+        print("DVC TRACKING COMPLETE")
+        print("="*80)
+        
+    except Exception as e:
+        print(f"\nDVC tracking failed: {e}")
+        print("Continuing without DVC tracking...")
+
+                    
 def prepare_data(config, args):
     """Prepare raw data for training."""
     print("\n" + "="*80)
@@ -255,12 +338,23 @@ def prepare_data(config, args):
     
     print(f"Preprocessing info saved: {preprocessing_info_path}")
     
+    train_path = config.data_processed / train_filename
+    test_path = config.data_processed / test_filename
+    
+    # DVC Tracking (if enabled)
+    if args.track_with_dvc:
+        track_with_dvc(
+            config, 
+            train_path,
+            test_path, 
+            feature_names_path, 
+            use_dvc=True
+        )
+    
     # Verify files were created
     print("\n" + "-"*80)
     print("VERIFICATION")
     print("-"*80)
-    train_path = config.data_processed / train_filename
-    test_path = config.data_processed / test_filename
     
     if train_path.exists() and test_path.exists():
         # Verify data is numeric
@@ -300,6 +394,10 @@ def prepare_data(config, args):
     print(f"Test data: {test_path}")
     print(f"Feature names: {feature_names_path}")
     print(f"Preprocessing info: {preprocessing_info_path}")
+    
+    if args.track_with_dvc and DVC_AVAILABLE:
+        print(f"\nData files tracked with DVC")
+    
     print("\n" + "="*80 + "\n")
 
 
@@ -334,6 +432,12 @@ The output data is ready for ML pipelines and models!
         type=str,
         default='config/config.yaml',
         help='Path to configuration file (default: config/config.yaml)'
+    )
+    
+    parser.add_argument(
+        '--track-with-dvc',
+        action='store_true',
+        help='Enable DVC tracking for data files'
     )
     
     args = parser.parse_args()

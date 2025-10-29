@@ -1,22 +1,88 @@
+# DVC Pipeline Definition
+# This file defines the stages of the ML pipeline for reproducibility
+
 stages:
-  preprocess:
-    cmd: python notebooks/02_data_preprocessing.py
+  # Stage 1: Data Preparation
+  prepare_data:
+    cmd: python scripts/prepare_data.py --track-with-dvc
     deps:
-      - notebooks/02_data_preprocessing.py
-      - data/processed/student_entry_performance_eda.csv
+      - data/raw/student_entry_performance_original.csv
+      - scripts/prepare_data.py
+      - src/data/loader.py
+      - src/data/preprocessing.py
+      - src/features/engineering.py
+      - config/config.yaml
     params:
-      - preprocessing.test_size
-      - preprocessing.random_state
+      - data.test_size
+      - data.random_state
+      - data.stratify
     outs:
-      - data/processed/student_performance_cleaned.csv:
-          persist: true
-      - data/processed/student_performance_preprocessed.csv:
-          persist: true
-      - data/processed/student_performance_train.csv:
-          persist: true
-      - data/processed/student_performance_test.csv:
-          persist: true
-      - data/processed/feature_names.txt:
-          persist: true
-      - reports/figures:
-          persist: true
+      - data/processed/student_performance_train.csv
+      - data/processed/student_performance_test.csv
+
+  # Stage 2: Train Baseline Models
+  train_baseline:
+    cmd: python scripts/train_model.py --mode baseline --track-with-dvc
+    deps:
+      - data/processed/student_performance_train.csv
+      - data/processed/student_performance_test.csv
+      - scripts/train_model.py
+      - src/models/train.py
+      - src/models/evaluate.py
+      - config/config.yaml
+    params:
+      - training.cv_folds
+      - training.random_state
+      - training.baseline_models
+    outs:
+      - models/best_model_baseline.pkl
+    metrics:
+      - reports/baseline_results.csv:
+          cache: false
+
+  # Stage 3: Train Pipeline Models
+  train_pipeline:
+    cmd: python scripts/train_pipeline.py --track-with-dvc
+    deps:
+      - data/processed/student_performance_train.csv
+      - data/processed/student_performance_test.csv
+      - scripts/train_pipeline.py
+      - src/models/pipeline.py
+      - src/models/train.py
+      - src/models/evaluate.py
+      - config/config.yaml
+    params:
+      - training.cv_folds
+      - training.random_state
+      - training.baseline_models
+    outs:
+      - models/best_pipeline_baseline.pkl
+    metrics:
+      - reports/pipeline_baseline_results.csv:
+          cache: false
+
+  # Stage 4: Hyperparameter Tuning (Optional - run manually)
+  train_tuning:
+    cmd: python scripts/train_model.py --mode tuning --top-n 3 --track-with-dvc
+    deps:
+      - data/processed/student_performance_train.csv
+      - data/processed/student_performance_test.csv
+      - reports/baseline_results.csv
+      - scripts/train_model.py
+      - src/models/train.py
+      - src/models/evaluate.py
+      - config/config.yaml
+    params:
+      - training.cv_folds
+      - training.random_state
+      - training.top_n_models
+      - models
+    outs:
+      - models/best_model_tuned.pkl
+    metrics:
+      - reports/tuning_results.csv:
+          cache: false
+
+
+
+

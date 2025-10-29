@@ -1,55 +1,282 @@
 schema: '2.0'
 stages:
-  run_notebook:
-    cmd: "bash -lc \"mkdir -p data/processed models reports/figures && python -m papermill
-      notebooks/mlops-eq16_notebooks_phase1_team16.ipynb notebooks/mlops-eq16_notebooks_phase1_team16_out.ipynb\"\
-      \n"
+  prepare_data:
+    cmd: python scripts/prepare_data.py --track-with-dvc
     deps:
-    - path: data/raw
+    - path: config/config.yaml
       hash: md5
-      md5: 00b239a329df515787855a4c3e78c490.dir
+      md5: b65f0e8f597b3fde80462b9d7fa12d9e
+      size: 4441
+    - path: data/raw/student_entry_performance_original.csv
+      hash: md5
+      md5: ab366a563a9c96d8f93d7d8a9e9dd7ba
       size: 53647
-      nfiles: 1
-    - path: notebooks/mlops-eq16_notebooks_phase1_team16.ipynb
+    - path: scripts/prepare_data.py
       hash: md5
-      md5: 06253265d0cb1a1cf1f00a6749a848aa
-      size: 801858
-    - path: params.yaml
+      md5: e5dda84579b877bee0f27ed7889b56a5
+      size: 16110
+    - path: src/data/loader.py
       hash: md5
-      md5: 4eb6562a923418c97ce7791d8101cc41
-      size: 143
+      md5: ef0e5a6ef6e2271c01165b09df2b29bb
+      size: 5238
+    - path: src/data/preprocessing.py
+      hash: md5
+      md5: abfa0168c08d0e19e87ce59784b9a1c0
+      size: 7904
+    - path: src/features/engineering.py
+      hash: md5
+      md5: d4ee5f3cde9d84767508d7686c2e9dd6
+      size: 6390
+    params:
+      params.yaml:
+        data.random_state: 42
+        data.stratify: true
+        data.test_size: 0.2
     outs:
-    - path: data/processed/student_entry_performance_eda.csv
-      hash: md5
-      md5: e54c65edadfcfdd67e240117785ff29b
-      size: 53646
-    - path: data/processed/student_performance_binary_preprocessed.csv
-      hash: md5
-      md5: 1ad16ccd954a3c8a0f5b4f11a4d001a9
-      size: 134650
-    - path: data/processed/student_performance_cleaned.csv
-      hash: md5
-      md5: 3a5e071cd99c0766938400dce87e2fbd
-      size: 51359
-    - path: data/processed/student_performance_encoded.csv
-      hash: md5
-      md5: 3a5e071cd99c0766938400dce87e2fbd
-      size: 51359
     - path: data/processed/student_performance_test.csv
       hash: md5
-      md5: 4afd85d610556b627ccc7a64f47998b6
-      size: 27605
+      md5: 42d099681bf0648723dfe47d4df20923
+      size: 8708
     - path: data/processed/student_performance_train.csv
       hash: md5
-      md5: 7bc198ed2fc769ea40217cef428f647f
-      size: 107749
-    - path: models
+      md5: 772951cef39cef32a2469c75799819fc
+      size: 32516
+  train_baseline:
+    cmd: python scripts/train_model.py --mode baseline --track-with-dvc
+    deps:
+    - path: config/config.yaml
       hash: md5
-      md5: d8703cdf6e0c055e61f07f58f323b4ad.dir
-      size: 26
-      nfiles: 1
-    - path: reports/figures
+      md5: b65f0e8f597b3fde80462b9d7fa12d9e
+      size: 4441
+    - path: data/processed/student_performance_test.csv
       hash: md5
-      md5: 20ecfcc542c202dc8de7813a77c0e4a2.dir
-      size: 6446803
-      nfiles: 17
+      md5: 42d099681bf0648723dfe47d4df20923
+      size: 8708
+    - path: data/processed/student_performance_train.csv
+      hash: md5
+      md5: 772951cef39cef32a2469c75799819fc
+      size: 32516
+    - path: scripts/train_model.py
+      hash: md5
+      md5: 30cfa03bb1c348fa6cf0efdff5e2e5a6
+      size: 15496
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 43bf2a13e1007908d9aaf60cb2eb4246
+      size: 14564
+    - path: src/models/train.py
+      hash: md5
+      md5: 69a27ee3188d463a801036a5dfd1c29f
+      size: 14775
+    params:
+      params.yaml:
+        training.baseline_models:
+        - Logistic Regression
+        - Random Forest
+        - Gradient Boosting
+        - SVM
+        - K-Nearest Neighbors
+        - Decision Tree
+        training.cv_folds: 5
+        training.random_state: 42
+    outs:
+    - path: models/best_model_baseline.pkl
+      hash: md5
+      md5: c8bce64f345fec8f27af43fb75b247d4
+      size: 110203
+    - path: reports/baseline_results.csv
+      hash: md5
+      md5: d846517c9873f792359e82c5966137bc
+      size: 1009
+  train_pipeline:
+    cmd: python scripts/train_pipeline.py --track-with-dvc
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b65f0e8f597b3fde80462b9d7fa12d9e
+      size: 4441
+    - path: data/processed/student_performance_test.csv
+      hash: md5
+      md5: 42d099681bf0648723dfe47d4df20923
+      size: 8708
+    - path: data/processed/student_performance_train.csv
+      hash: md5
+      md5: 772951cef39cef32a2469c75799819fc
+      size: 32516
+    - path: scripts/train_pipeline.py
+      hash: md5
+      md5: ababcce9c6494ff71af8f39f7ddfa87e
+      size: 15501
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 43bf2a13e1007908d9aaf60cb2eb4246
+      size: 14564
+    - path: src/models/pipeline.py
+      hash: md5
+      md5: 1704ca8cb77be06786e24e9f1a131624
+      size: 16302
+    - path: src/models/train.py
+      hash: md5
+      md5: 69a27ee3188d463a801036a5dfd1c29f
+      size: 14775
+    params:
+      params.yaml:
+        training.baseline_models:
+        - Logistic Regression
+        - Random Forest
+        - Gradient Boosting
+        - SVM
+        - K-Nearest Neighbors
+        - Decision Tree
+        training.cv_folds: 5
+        training.random_state: 42
+    outs:
+    - path: models/best_pipeline_baseline.pkl
+      hash: md5
+      md5: e7cc90378aa705331040be3c60937520
+      size: 3498
+    - path: reports/pipeline_baseline_results.csv
+      hash: md5
+      md5: ad606513db334cb7875898c598fc6236
+      size: 1137
+  train_tuning:
+    cmd: python scripts/train_model.py --mode tuning --top-n 3 --track-with-dvc
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b65f0e8f597b3fde80462b9d7fa12d9e
+      size: 4441
+    - path: data/processed/student_performance_test.csv
+      hash: md5
+      md5: 42d099681bf0648723dfe47d4df20923
+      size: 8708
+    - path: data/processed/student_performance_train.csv
+      hash: md5
+      md5: 772951cef39cef32a2469c75799819fc
+      size: 32516
+    - path: reports/baseline_results.csv
+      hash: md5
+      md5: d846517c9873f792359e82c5966137bc
+      size: 1009
+    - path: scripts/train_model.py
+      hash: md5
+      md5: 30cfa03bb1c348fa6cf0efdff5e2e5a6
+      size: 15496
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 43bf2a13e1007908d9aaf60cb2eb4246
+      size: 14564
+    - path: src/models/train.py
+      hash: md5
+      md5: 69a27ee3188d463a801036a5dfd1c29f
+      size: 14775
+    params:
+      params.yaml:
+        models:
+          logistic_regression:
+            C:
+            - 0.001
+            - 0.01
+            - 0.1
+            - 1
+            - 10
+            - 100
+            penalty:
+            - l2
+            solver:
+            - lbfgs
+            - liblinear
+            - saga
+            max_iter: 1000
+            random_state: 42
+          random_forest:
+            n_estimators:
+            - 50
+            - 100
+            - 200
+            max_depth:
+            - 5
+            - 10
+            - 15
+            - 
+            min_samples_split:
+            - 2
+            - 5
+            - 10
+            min_samples_leaf:
+            - 1
+            - 2
+            - 4
+            random_state: 42
+            n_jobs: -1
+          gradient_boosting:
+            n_estimators:
+            - 50
+            - 100
+            - 200
+            learning_rate:
+            - 0.01
+            - 0.1
+            - 0.2
+            max_depth:
+            - 3
+            - 5
+            - 7
+            min_samples_split:
+            - 2
+            - 5
+            random_state: 42
+          svm:
+            C:
+            - 0.1
+            - 1
+            - 10
+            - 100
+            kernel:
+            - linear
+            - rbf
+            gamma:
+            - scale
+            - auto
+            probability: true
+            random_state: 42
+          k_neighbors:
+            n_neighbors:
+            - 3
+            - 5
+            - 7
+            - 9
+            weights:
+            - uniform
+            - distance
+            metric:
+            - euclidean
+            - manhattan
+          decision_tree:
+            max_depth:
+            - 5
+            - 10
+            - 15
+            - 20
+            - 
+            min_samples_split:
+            - 2
+            - 5
+            - 10
+            min_samples_leaf:
+            - 1
+            - 2
+            - 4
+            random_state: 42
+        training.cv_folds: 5
+        training.random_state: 42
+        training.top_n_models: 3
+    outs:
+    - path: models/best_model_tuned.pkl
+      hash: md5
+      md5: d35ab0b818383e12c913a392737c2bcf
+      size: 85755
+    - path: reports/tuning_results.csv
+      hash: md5
+      md5: 67c0d78365a37f95bdd84730038318f7
+      size: 618

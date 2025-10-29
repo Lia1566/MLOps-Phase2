@@ -1,0 +1,5 @@
+outs:
+- md5: eb24416073bdd0cafba7a6d3995f332e
+  size: 130457
+  hash: md5
+  path: random_forest_tuned.pkl

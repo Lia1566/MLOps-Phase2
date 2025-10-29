@@ -1,0 +1,5 @@
+outs:
+- md5: d35ab0b818383e12c913a392737c2bcf
+  size: 85755
+  hash: md5
+  path: svm_tuned.pkl

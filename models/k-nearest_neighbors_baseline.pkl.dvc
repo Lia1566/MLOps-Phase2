@@ -1,0 +1,5 @@
+outs:
+- md5: df0204201fd19d5288a2209d53fdab7a
+  size: 125220
+  hash: md5
+  path: k-nearest_neighbors_baseline.pkl

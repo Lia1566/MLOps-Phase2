@@ -1,8 +1,131 @@
+data:
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+training:
+  cv_folds: 5
+  random_state: 42
+  n_jobs: -1
+  verbose: 1
+  baseline_models:
+  - Logistic Regression
+  - Random Forest
+  - Gradient Boosting
+  - SVM
+  - K-Nearest Neighbors
+  - Decision Tree
+  top_n_models: 3
+models:
+  logistic_regression:
+    C:
+    - 0.001
+    - 0.01
+    - 0.1
+    - 1
+    - 10
+    - 100
+    penalty:
+    - l2
+    solver:
+    - lbfgs
+    - liblinear
+    - saga
+    max_iter: 1000
+    random_state: 42
+  random_forest:
+    n_estimators:
+    - 50
+    - 100
+    - 200
+    max_depth:
+    - 5
+    - 10
+    - 15
+    - null
+    min_samples_split:
+    - 2
+    - 5
+    - 10
+    min_samples_leaf:
+    - 1
+    - 2
+    - 4
+    random_state: 42
+    n_jobs: -1
+  gradient_boosting:
+    n_estimators:
+    - 50
+    - 100
+    - 200
+    learning_rate:
+    - 0.01
+    - 0.1
+    - 0.2
+    max_depth:
+    - 3
+    - 5
+    - 7
+    min_samples_split:
+    - 2
+    - 5
+    random_state: 42
+  svm:
+    C:
+    - 0.1
+    - 1
+    - 10
+    - 100
+    kernel:
+    - linear
+    - rbf
+    gamma:
+    - scale
+    - auto
+    probability: true
+    random_state: 42
+  k_neighbors:
+    n_neighbors:
+    - 3
+    - 5
+    - 7
+    - 9
+    weights:
+    - uniform
+    - distance
+    metric:
+    - euclidean
+    - manhattan
+  decision_tree:
+    max_depth:
+    - 5
+    - 10
+    - 15
+    - 20
+    - null
+    min_samples_split:
+    - 2
+    - 5
+    - 10
+    min_samples_leaf:
+    - 1
+    - 2
+    - 4
+    random_state: 42
 preprocessing:
   test_size: 0.2
   random_state: 42
-  scaler: "standard"
-
+  scaler: standard
 model:
-  algorithm: "SVM"
+  algorithm: SVM
+  mode: tuning
   random_state: 42
+  best_accuracy: 0.72
+  best_f1: 0.6902654867256637
+pipeline:
+  algorithm: Logistic Regression
+  preprocessing: StandardScaler
+  random_state: 42
+  best_accuracy: 0.696
+  best_f1: 0.6415094339622641
+  cv_mean: 0.7143434343434343
+  cv_std: 0.05370626425399926

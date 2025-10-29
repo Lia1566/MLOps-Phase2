@@ -84,3 +84,14 @@ To reproduce these results:
 
 The pipeline automatically handles preprocessing!
 
+================================================================================
+DVC TRACKING
+================================================================================
+
+This pipeline is tracked with DVC for version control.
+
+To retrieve this version:
+  1. Checkout the git tag
+  2. Run: dvc checkout
+  3. The exact pipeline files will be restored
+

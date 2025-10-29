@@ -5,7 +5,7 @@ project:
   name: student_performance_prediction
   version: 1.0.0
   description: Student performance prediction using machine learning
-  author: Your Name
+  author: Natalia Nevarez Tinoco
   date_created: 2025-10-24
 
 # Project paths
@@ -120,6 +120,46 @@ mlflow:
   
   # Auto-logging
   autolog: false
+
+# DVC configuration
+dvc:
+  # Remote storage configuration
+  remote:
+    name: myremote
+    url: none # Set to your remote storaage (e.g., s3://bucket, gs://bucket, /path/to/storage)
+
+  # What to track with DVC
+  track: 
+    data: true
+    models: true
+    pipelines: true
+    reports: false # Reports are usually small enough for git
+
+  # DVC pipeline stages (corresponds to dvc.yaml)
+  pipeline: 
+    stages:
+      - prepare_data
+      - train_baseline
+      - train_pipeline
+      - train_tuning
+  
+  # Versioning settings
+  versioning:
+    auto_stage: true # Automatically stage .dvc files in git
+    auto_commit: false # Don't auto-commit (let user control commits)
+    create_tags: true # Create git tags for versions
+    tag_prefix: v # Prefix for versions (e.g., v1.0.0)
+
+  # Cache settings
+  cache:
+    dir: .dvc/cache
+    type: copy # Options: copy, symlink, hardlink, reflink
+
+  # Push/pull settings
+  sync: 
+    auto_push: false # Don't auto-push to remote
+    auto_pull: false # Don't auto-pull from remote
+    jobs: 4 # Number of parallel jobs for push/pull
 
 # Evaluation configuration
 evaluation:
