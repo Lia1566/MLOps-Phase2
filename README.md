@@ -470,6 +470,31 @@ Best Tuned Models: SVM
 - F1-Score: 69.0%
 - Parameters: Linear kernel, C=1
 
+### Understanding the Three Approaches
+
+**Why do we have three different result tables?**
+
+1. Baseline Models: Quick exploration with potential data leakage
+   - Best: SVM (may be optimistic)
+
+2. Pipeline Models: Industry best practice, no data leakage
+   - Best: Logistic Regression (most reliable)
+   - Recommended for deployment
+  
+3. Tuned Models: Hyperparameter optimization
+   - Best: SVM (balanced optimization)
+
+**Why do results vary?**
+- Preprocessing strategy (leakage vs no leakage)
+- Cross-Validation rigor
+- Hyperparameter configuration
+- Small test set (125 samples)
+
+**Which is most important?**
+For MLOps, **Pipeline Models** are most valuable because they're:
+- Production-ready (single deployable object)
+- Reproducible (no manual preprocessing needed)
+- Best practice (prevents data leakage)
 
 ## Key Findings
 
@@ -481,7 +506,7 @@ Best Tuned Models: SVM
 6. All top models show balanced precision-recall trade-offs
 7. Decision Tree consistently showed lowest performance, indicating need for ensemble methods
 
-Recommendations
+### Recommendations
 - For deployment: Use Logistic Regression pipeline (simple, interpretable, reproducible)
 - For highest accuracy: Use Baseline SVM (73.6% test accuracy)
 - For production: Consider ensemble of top 3 models
