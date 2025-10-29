@@ -135,6 +135,19 @@ Fase 2/
    - K-Nearest Neighbors
    - Decision Tree
   
+7. Robust Path Management
+   - Cross-platform compatibility using `pathlib.Path`
+   - Centralized path configuration in `config/config.yaml`
+   - Relative paths from project root (works anywhere)
+   - Automatic directory creation on first run
+   - No hardcoded paths in any scripts
+   - Works seamlessly on Windows, Mac and Linux
+   - Benefits:
+        - Team members can run project without path adjustments
+        - Works in Docker and CI/CD pipelines
+        - Easy to move or deploy project
+        - Professional software engineering practice
+  
 ## Team & Roles
 
 **Team 16 Members**
