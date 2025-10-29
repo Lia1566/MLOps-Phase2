@@ -423,7 +423,7 @@ Benefits of DVC
 
 ### Model Performance Comparison
 
-Baseline Models (No Preprocessing Pipeline)
+#### Baseline Models (No Preprocessing Pipeline)
 
 | Model | Test Acurracy | Test F1 | Test Precision | Test Recall | CV Score (Mean ± Std)
 |-----------|-----------|-----------| -----------| -----------| -----------|
@@ -440,7 +440,7 @@ Baseline Models (No Preprocessing Pipeline)
 - ROC-AUC: 82.1%
 - Cross-Validation: 68.8% (±6.1%)
 
-### Pipeline Models (With StandardScaler Preprocessing)
+#### Pipeline Models (With StandardScaler Preprocessing)
 
 | Model | Test Acurracy | Test F1 | Test Precision | Test Recall | CV Score (Mean ± Std)
 |-----------|-----------|-----------| -----------| -----------| -----------| 
@@ -457,7 +457,7 @@ Best Pipeline Model: Logistic Regression
 - Cross Validation: 71.4% (±5.4%)
 - Structure: `StandardScaler → Logistic Regression`
 
-Tuned Models (Hyperparameter Optimization)
+#### Tuned Models (Hyperparameter Optimization)
 
 | Model | Test Acurracy | Test F1 | Best Parameters | CV Score
 |-----------|-----------|-----------| -----------| -----------| -----------| 
@@ -472,6 +472,7 @@ Best Tuned Models: SVM
 
 
 ## Key Findings
+
 1. **Baseline SVM** achieved highest test accuracy (73.6%) without pipeline preprocessing
 2. Three models tied in pipeline comparison (Logistics Regression, Random Forest, SVM at 69.6%)
 3. **Logistic Regression** won pipeline comparison due to highest CV score and best generalization
