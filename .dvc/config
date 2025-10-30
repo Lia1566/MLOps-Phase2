@@ -1,6 +1,11 @@
 [core]
     autostage = true
+    remote = myremote
 [cache]
     dir = cache
 ['remote "localstore"']
     url = ../../dvcstore
+['remote "myremote"']
+    url = s3://itesm-mna/202502-equipo16
+    region = us-east-2
+    profile = equipo16
