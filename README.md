@@ -764,6 +764,7 @@ All team members contributed equally to different aspects of the project followi
 - Data source: https://archive.ics.uci.edu/dataset/582/student+performance+on+an+entrance+examination
 - Course: MLOps
 - Institution: Tecnologico de Monterrey
+- Course instructors and TA
 - Semester: Fall 2025
 
 ### References
