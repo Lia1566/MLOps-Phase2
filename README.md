@@ -59,39 +59,48 @@ Fase 2/
 │   │   └── engineering.py      # Feature engineering functions
 │   │
 │   ├── models/
-│   │   ├── train.py           # Model training functions
-│   │   ├── evaluate.py        # Model evaluation functions
-│   │   └── pipeline.py        # Scikit-learn pipeline implementation
+│   │   ├── train.py            # Model training functions
+│   │   ├── evaluate.py         # Model evaluation functions
+│   │   └── pipeline.py         # Scikit-learn pipeline implementation
 │   │
 │   ├── visualization/
-│   │   └── plots.py           # Visualization functions
+│   │   └── plots.py            # Visualization functions
 │   │
 │   └── utils/
-│       └── config.py          # Configuration management
-│       └── dvc_manager.py     # DVC automation utilities
+│       └── config.py           # Configuration management
+│       └── dvc_manager.py      # DVC automation utilities
 │
 ├── scripts/
-│   ├── prepare_data.py        # Data preparation pipeline
-│   ├── train_pipeline.py      # Train models with pipelines
-│   ├── train_model.py         # Train baseline models
-│   └── evaluate_model.py      # Model evaluation script
+│   ├── prepare_data.py         # Data preparation pipeline
+│   ├── train_pipeline.py       # Train models with pipelines
+│   ├── train_model.py          # Train baseline models
+│   └── evaluate_model.py       # Model evaluation script
+│   └── init_dvc.sh
+│   └── track_data_dvc.sh
 │
 ├── models/                     # Saved trained models (*.pkl, DVC tracked)
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_data_preprocessing.ipynb
+│   ├── 03_data_versioning.ipynb
+│   ├── 04_model_training.ipynb
+│   ├── 05_model_tuning.ipynb
+│   ├── 06_model_evaluation.ipynb        
 ├── reports/                    # Results and documentation (DVC tracked)
-│   ├── figures/               # Visualization outputs
+│   ├── figures/                # Visualization outputs
 │   ├── baseline_results.csv    # Baseline model results
 │   ├── pipeline_baseline_results.csv  # Pipeline model results
 │   ├── tuning_results.csv      # Hyperparameter tuning results
-│   └── *.csv                  # Analysis report
+│   └── *.csv                   # Analysis report
 │
 ├── mlruns/                     # MLflow experiment tracking
 ├── logs/                       # Training logs
 │
-├── dvc.yaml                       # DVC pipeline definition
-├── dvc.lock                       # DVC pipeline lock file
-├── params.yaml                    # DVC tracked parameters
-├── .dvc/                          # DVC configuration
-│   └── config                 # DVC remote (S3) configuration
+├── dvc.yaml                    # DVC pipeline definition
+├── dvc.lock                    # DVC pipeline lock file
+├── params.yaml                 # DVC tracked parameters
+├── .dvc/                       # DVC configuration
+│   └── config                  # DVC remote (S3) configuration
 ├── .gitignore
 ├── README.md
 └── requirements.txt
