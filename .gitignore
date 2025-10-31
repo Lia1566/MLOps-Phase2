@@ -36,10 +36,10 @@ ENV/
 .vscode/
 
 # Data files (too large for GitHub)
-data/raw/*.csv
-data/processed/*.csv
-data/external/*.csv
-*.csv
+#data/raw/*.csv
+#data/processed/*.csv
+#data/external/*.csv
+#*.csv
 
 # Model files (too large for GitHub)
 models/*.pkl
