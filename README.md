@@ -12,6 +12,7 @@ This project implemets a machine learning pipeline to predict student performanc
 - Installation
 - Usage
 - DVC Pipieline
+- AWS S3 Remote Storage 
 - Results
 - MLflow Experiment Tracking
 - Techonology Used
@@ -38,7 +39,6 @@ The project focuses on:
 
 ```
 Fase 2/
-│
 ├── config/
 │   └── config.yaml              # Project configuration
 │
@@ -432,6 +432,112 @@ Benefits of DVC
 - Collaboration: Share data and models without Git bloat
 - Automation: Define ML pipeline as code
 
+## AWS S3 Remote Storage
+
+This project uses AWS S3 for remote data and model storage, enabling team collaboration and version control large files. 
+
+### Configuration
+- **S3 Bucket**: `s3://itesm-mna/202502-equipo16/`
+- **Region**: `us-east-2`
+- **AWS Profile**: `equipo16`
+
+### Setup for Team Members
+#### 1. Install AWS CLI
+
+**macOS:**
+```
+curl: "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
+rm AWSCLIV2.pkg
+aws --version
+```
+**Windows:**
+Download and install from: https://awscli.amazonaws.com/AWSCLIV2.msi
+
+#### 2. Configure AWS Credentials
+
+Request credenctials from TA, then run:
+```
+aws configure --profile equipo16
+```
+
+Enter when prompted:
+- **AWS Access Key ID**: [From TA]
+- **AWS Secret Access Key**: [From TA]
+- **Default region name**: `us-east-2`
+- **Default output format**: `json`
+
+#### 3. Verify Access
+```
+aws sts get-caller-identity --profile equipo16
+aws s3 ls s3://itesm-mna/202502-equipo16/ --profile equipo16
+```
+
+#### 4. Install DVC with S3
+```
+pip install "dvc[s3"
+```
+
+### Working with S3
+**Pull data and models:**
+```
+dvc pull
+```
+
+**Push data and models:**
+```
+dvc push
+```
+
+**Check sync status:**
+```
+dvc status
+```
+
+### Daily Workflow
+When making changes:
+```
+# 1. Tracking new data/models:
+dvc add data/new_file.csv
+
+# 2. Push to S3
+dvc push
+
+# 3. Commit tp Git
+git add data/new_file.csv.dvc .gitignore
+git commit -m "Add new data"
+git push
+```
+When pulling teammate's changes:
+```
+git pull
+dvc pull
+```
+
+### Important Notes
+- Credentials are programmatic access only - no AWS console access.
+
+Best practices:
+- Always `dvc pull` before starting work
+- Always `dvc push` after tracking new files
+- Never commit AWS credentials to Git
+
+### Troubleshooting
+
+Error: "s3 is supported, but required 'dvc-s3'"
+```
+pip install "dvc[s3]"
+```
+
+Error: "SignatureDoesNotMatch"
+- Verify credentials with your TA
+- Reconfigure: `aws configure --profile equipo16`
+
+Error: "AccessDenied"
+- Check you're using: `--equipo equipo16`
+- Verify path: `s3://itesm-mna/202502-equipo16/`
+
+
 ## Results
 
 ### Model Performance Comparison
@@ -658,6 +764,7 @@ All team members contributed equally to different aspects of the project followi
 - Data source: https://archive.ics.uci.edu/dataset/582/student+performance+on+an+entrance+examination
 - Course: MLOps
 - Institution: Tecnologico de Monterrey
+- Course instructors and TA
 - Semester: Fall 2025
 
 ### References
