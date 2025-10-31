@@ -1,5 +1,5 @@
 # ML Project Configuration File
-# This file contains all configuration parameters for the machine learning project
+# This file contains all configuration parameters for our machine learning project
 
 project:
   name: student_performance_prediction
@@ -126,7 +126,9 @@ dvc:
   # Remote storage configuration
   remote:
     name: myremote
-    url: none # Set to your remote storaage (e.g., s3://bucket, gs://bucket, /path/to/storage)
+    url: s3://itesm-mna/202502-equipo16
+    region: us-east-2
+    profile: equipo16 
 
   # What to track with DVC
   track: 
