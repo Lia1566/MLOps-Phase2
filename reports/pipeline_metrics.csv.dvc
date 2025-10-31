@@ -1,0 +1,5 @@
+outs:
+- md5: 2ec1b3fdbbf5877bcedec98aca857ade
+  size: 376
+  hash: md5
+  path: pipeline_metrics.csv
