@@ -90,3 +90,20 @@ __pycache__/
 
 # Google Cloud credentials (DO NOT COMMIT)
 gdrive-credentials.json
+
+# DVC
+.dvc/tmp
+.dvc/cache
+
+# AWS credentials (extra safety)
+*.pem
+*.key
+aws-credentials.json
+
+# Additional large file formats
+*.h5
+*.hdf5
+*.parquet
+
+# Allow .env.example
+!.env.example
