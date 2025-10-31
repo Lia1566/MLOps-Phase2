@@ -2,9 +2,10 @@
 
 **Student Performance Prediction - Refactorization and Pipelines**
 
-This project implemets a machine learning pipeline to predict student performance using various classification algorithms. The project demonstrates code refactorization, modular design, sklearn pipeline implementation, and experiment tracking with MLflow and DVC. 
+This project implements a machine learning pipeline to predict student performance using various classification algorithms. The project demonstrates code refactorization, modular design, sklearn pipeline implementation, and experiment tracking with MLflow and DVC with AWS S3 storage.
 
 ## Table of Contents
+
 - Project Overview
 - Project Structure
 - Features
@@ -17,23 +18,26 @@ This project implemets a machine learning pipeline to predict student performanc
 - MLflow Experiment Tracking
 - Techonology Used
 - Configuration
-- Contributions
+- Contributing
 - Acknowledgements
 
 ## Project Overview
 
 This project predicts whether students will achieve high performance (Excellent/Very Good) or lower performance based on various features including:
+
 - Demographics (Gender, Caste)
 - Academic background (Class X & XII percentages)
 - Study factors (Coaching, Study time. Medium of instruction)
 - Parental education and occupation
 
 The project focuses on:
+
 1. **Code Refactorization**: Transforming monolithic notebooks into modular, reusable code.
 2. **Pipeline Implementation**: Using Scikit-learn pipelines for reproducible ML workflows.
-3. **Experiment Tracking**: Comprehensive loggong with MLflow and DVC.
+3. **Experiment Tracking**: Comprehensive logging with MLflow and DVC.
 4. **Model Versioning**: Track all models with versions, parameters, and metrics.
-5. **Reproducibility**: Ensure anyone can replicate experiments from scratch. 
+5. **Reproducibility**: Ensure anyone can replicate experiments from scratch.
+6. **Cloud storage**: AWS S3 integration for data and model versioning.
 
 ## Project Structure
 
@@ -43,8 +47,8 @@ Fase 2/
 │   └── config.yaml              # Project configuration
 │
 ├── data/
-│   ├── raw/                     # Original datasets
-│   └── processed/               # Preprocessed datasets
+│   ├── raw/                     # Original datasets (DVC tracked)
+│   └── processed/               # Preprocessed datasets (DVC tracked)
 │
 ├── src/
 │   ├── data/
@@ -64,6 +68,7 @@ Fase 2/
 │   │
 │   └── utils/
 │       └── config.py          # Configuration management
+│       └── dvc_manager.py     # DVC automation utilities
 │
 ├── scripts/
 │   ├── prepare_data.py        # Data preparation pipeline
@@ -72,12 +77,12 @@ Fase 2/
 │   └── evaluate_model.py      # Model evaluation script
 │
 ├── models/                     # Saved trained models (*.pkl, DVC tracked)
-├── reports/                    # Results and documentation
+├── reports/                    # Results and documentation (DVC tracked)
 │   ├── figures/               # Visualization outputs
 │   ├── baseline_results.csv    # Baseline model results
 │   ├── pipeline_baseline_results.csv  # Pipeline model results
 │   ├── tuning_results.csv      # Hyperparameter tuning results
-│   └── *.txt                  # Additional documentation
+│   └── *.csv                  # Analysis report
 │
 ├── mlruns/                     # MLflow experiment tracking
 ├── logs/                       # Training logs
@@ -86,6 +91,7 @@ Fase 2/
 ├── dvc.lock                       # DVC pipeline lock file
 ├── params.yaml                    # DVC tracked parameters
 ├── .dvc/                          # DVC configuration
+│   └── config                 # DVC remote (S3) configuration
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -95,9 +101,9 @@ Fase 2/
 
 1. **Modular Code Architecture**
    - Data Module: Data loading, preprocessing and feature engineering
-   - Modles Module: Training, evaluation and pipeline implementation
+   - Models Module: Training, evaluation and pipeline implementation
    - Visualization Module: Plotting and result visualization
-   - Utils Module: Configuration managemnet and helpers
+   - Utils Module: Configuration management and helpers
   
 2. Scikit-learn Pipelines
    - Automated preprocessing with StandardScalar
@@ -107,27 +113,35 @@ Fase 2/
    - All preprocessing steps bundled with model
   
 3. DVC Pipeline Automation
-   - Complete 4-sate pipeline: `prepare_data → train_baseline → train_pipeline → train_tuning`
+   - Complete 4-stage pipeline: `prepare_data → train_baseline → train_pipeline → train_tuning`
    - Automatic dependency tracking
    - Reproducible experiments with `dvc repro`
-   - Data and model versioning
-   - Pipeline visualization with `dvc dag` 
+   - Data and model versioning with S3 backend
+   - Pipeline visualization with `dvc dag`
+  
+4. AWS S3 Integration
+   - Remote storage for data and models
+   - Team collaboration support
+   - Versioned artifacts in the cloud
+   - S3 bucket: `s3://itesm-mna/202502-equipo16`
+   - Region: `us-east-2`
+   - Profile based authentication
 
-4. MLflow Experiment Tracking
+5. MLflow Experiment Tracking
    - Automatic logging of parameters and metrics
    - Model versioning and storage
    - Visual comparison of experiments
    - Reproducible results
    - Model registry for production deployment
   
-5. Comprehensive Data Preprocessing
+6. Comprehensive Data Preprocessing
    - Ordinal encoding for ordered categories (grades, times)
    - One-hot encoding for nominal features (gender, caste, etc.)
    - Missing value handling with median imputation
    - Train-test splitting with stratification
    - Feature scaling with StandardScaler
   
-6. Multiple ML Algorithms
+7. Multiple ML Algorithms
    - Logistic Regression
    - Random Forest
    - Gradient Boosting
@@ -135,7 +149,7 @@ Fase 2/
    - K-Nearest Neighbors
    - Decision Tree
   
-7. Robust Path Management
+8. Robust Path Management
    - Cross-platform compatibility using `pathlib.Path`
    - Centralized path configuration in `config/config.yaml`
    - Relative paths from project root (works anywhere)
@@ -155,13 +169,13 @@ Fase 2/
 |-----------|-----------|-----------| 
 | Estaban Hidekel Solares Orozco | DevOps Engineer | CI/CD setup, infrastructure management, DVC configuration, version control |
 | Jesús Antonio López Wayas | Software Engineer | Code refactorization, modular architecture, code quality, testing | 
-| Natalia Nevarez Tinoco | Data Enfineer | Data pipeline, preprocessing, feature engineering, data quality |
+| Natalia Nevarez Tinoco | Data Engineer | Data pipeline, preprocessing, feature engineering, data quality |
 | Roberto López Baldomero | ML Engineer | Model training, hyperparameter tuning, pipeline implementation, MLflow setup | 
 | Yander Alec Ortega Rosales | Data Scientist | EDA, model selection, evaluation metrics, results analysis | 
 
 ### Role Activities in Phase 2
 
-**DevOps Enginer** (Esteban Hidekel)
+**DevOps Engineer** (Esteban Hidekel)
 - Set up DVC for data and model versioning
 - Configured `dvc.yaml` pipeline with 4 stages
 - Integrated DVC with Git workflow
@@ -193,7 +207,7 @@ Fase 2/
 - Integrated models with DVC versioning
 - Ensured model reproducbility
 
-**Data Scientist** (Ynader Alec)
+**Data Scientist** (Yander Alec)
 - Conduced exploratory data anylsis
 - Selected appropriate ML algorithms
 - Defined evaluation metrics and thresholds
@@ -213,7 +227,7 @@ Data Scientist → Data Engineer → ML Engineer → DevOps → Software Enginee
 ```
 ### Collaborative Workflow:
 1. Data Scientist analyzes data and selects models
-2. Data Enfineer builds preprocessing pipeline
+2. Data Engineer builds preprocessing pipeline
 3. ML Engineer implements training and experiment tracking
 4. Software Engineer refactors code into modular structure
 5. DevOps Engineer sets up versioning and reproducibility
@@ -227,13 +241,14 @@ Data Scientist → Data Engineer → ML Engineer → DevOps → Software Enginee
 - pip package manager
 - Git
 - DVC (Data Version Control)
+- AWS account with S3 access (for remote storage)
 
 ### Setup
 
 1. Clone repository
 ```
 git clone https://github.com/Lia1566/MLOps-Phase2.git
-cd Phase 2
+cd MLOps-Phase2
 ```
 2. Create vistual environment (recommended)
 ```
@@ -244,19 +259,34 @@ source venv/bin/activate # On windows: venv\Scripts\activate
 ```
 pip install -r requirements.txt
 ```
-4. Initialize DVC (if not already initialized)
+4. Configure AWS Credentials (for S3 access)
+Option A: Environment variables
+```
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_DEFAULT_REGION=us-east-2
+```
+Option B: AWS credentials file
+```
+# Create ~/.aws/credentials
+[equipo16]
+aws_access_key_id = your_access_key
+aws_secret_access_key = your_secret_key
+region = us-east-2
+```
+5. Initialize DVC (if not already initialized)
 ```
 dvc init
 ```
-5. Pull data and modules (if using DVC remote)
+6. Pull data and models from S3
 ```
 dvc pull
 ```
-6. Create necessary directories
+7. Create necessary directories
 ```
-mkdir -p data/raw data/processed moodels reports/figures logs mlruns
+mkdir -p logs mlruns
 ```
-5. Add data
+8. Add data
 - Place raw data file in `data/raw`
 - File name: `student_entry_performance_original.csv`
 
@@ -264,14 +294,14 @@ mkdir -p data/raw data/processed moodels reports/figures logs mlruns
 
 ### Quick Start: Run Complete Pipelines
 ```
-# Run all steps automatically
+# Run all 4 steps automatically
 dvc repro
 ```
-This single command will:
-1. Prepare data (if needed)
-2. Train baseline models (if needed)
-3. Train pipeline models (if needed)
-4. Perform hyperparameters tuning (if needed)
+This executes:
+- Data preparation
+- Baseline model training
+- Pipeline model training
+- Hyperparameter tuning
 
 ### Step-by-Step Usage
 
@@ -345,7 +375,13 @@ Output:
 - Logs all runs to MLflow
 
 #### Step 5. View MLflow UI
+```
+# Check reports
+cat reports/baseline_results.csv
+cat reports/pipeline_baseline_results.csv
+cat reports/tuning_results.csv
 
+```
 Explore experiments and compare models:
 ```
 mlflow ui
@@ -365,39 +401,61 @@ Output:
 - Model card with metadata
 
 ## DVC Pipeline
-**Pipeline Stages**
-The project uses a 4-stages DVC pipeline for complete reproducibility:
+
+**Pipeline Structure**
+Our DVC pipeline consists of 4 stages:
+
+graph LR
+    A[prepare_data] --> B[train_baseline]
+    A --> C[train_pipeline]
+    B --> D[train_tuning]
+
+Stage Details
+Stage 1: prepare_data
+- Input: `data/raw/student_entry_performance_original.csv`
+- Output: Train/test datasets
+- Tracks: Preprocessing parameters
+
+Stage 2: train_baseline
+- Input: Processed data
+- Output: Baseline models
+- Metrics: Performance comparison
+
+Stage 3: train_pipeline
+- Input: Processed data
+- Outut: Pipeline models with preprocessing
+- Metrics: Pipeline performance
+
+Stage 4: train_tuning
+- Input: Baseline results, processed data
+- Output: Tuned models
+- Metrics: Optimized performance
+
+### DVC Commands
 ```
-data/raw.dvc
-     ↓
-prepare_data
-     ↓
-     ├─→ train_baseline → train_tuning
-     └─→ train_pipeline
-```
-### View Pipeline
-```
-# Show pipeline structure
+# Reproduce entire pipeline
+dvc repro
+
+# Reproduce specific stage
+dvc repro train_baseline
+
+# Show pipeline DAG
 dvc dag
 
 # Check pipeline status
 dvc status
 
-# List all stages
-dvc stage list
-```
-### Run Pipeline
+# Compare experiments
+dvc metrics show
+dvc metrics diff
 
-```
-# Run entire pipeline
-dvc repro
+# Push changes to S3
+dvc push
 
-# Run specific stage
-dvc repro prepare_data
-dvc repro train_baseline
-dvc repro train_pipeline
-dvc repro train_tuning
+# Pull from S3
+dvc pull
 ```
+
 
 ### Pipeline Definition (`dvc.yaml`)
 
@@ -441,41 +499,18 @@ This project uses AWS S3 for remote data and model storage, enabling team collab
 - **Region**: `us-east-2`
 - **AWS Profile**: `equipo16`
 
-### Setup for Team Members
-#### 1. Install AWS CLI
+### DVC Remote Setup
+S3 remote is already configures in `.dvc/config`:
 
-**macOS:**
 ```
-curl: "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-sudo installer -pkg AWSCLIV2.pkg -target /
-rm AWSCLIV2.pkg
-aws --version
-```
-**Windows:**
-Download and install from: https://awscli.amazonaws.com/AWSCLIV2.msi
+[core]
+    autostage = true
+    remote = myremote
 
-#### 2. Configure AWS Credentials
-
-Request credenctials from TA, then run:
-```
-aws configure --profile equipo16
-```
-
-Enter when prompted:
-- **AWS Access Key ID**: [From TA]
-- **AWS Secret Access Key**: [From TA]
-- **Default region name**: `us-east-2`
-- **Default output format**: `json`
-
-#### 3. Verify Access
-```
-aws sts get-caller-identity --profile equipo16
-aws s3 ls s3://itesm-mna/202502-equipo16/ --profile equipo16
-```
-
-#### 4. Install DVC with S3
-```
-pip install "dvc[s3"
+['remote "myremote"']
+    url = s3://itesm-mna/202502-equipo16
+    region = us-east-2
+    profile = equipo16
 ```
 
 ### Working with S3
@@ -668,27 +703,31 @@ All models are registered in MLflow with
 **Core Libraries**
 - Python 3.12 (Programming language)
 - scikit-learn 1.3+: Machine learning algorithms and pipelines
-- pandas: Data manipulation
-- numpy: Numerical operations
+- pandas 2.0+: Data manipulation
+- numpy 1.24+: Numerical operations
 
 **MLOps Tools**
 - MLflow: Experiment Tracking and model versioning
 - DVC: Data and pipeline versioning
 - Git: Source code version control
+- AWS S3: Remote storage for data and models
+- boto31.28+: AWS SDK for Python
 
 **Visualization**
--matplotlib: Statistic plot
-seaborn: Statistical visualization
+- matplotlib: Statistic plot
+- seaborn: Statistical visualization
 
 **Configuration & Utilities**
 - PyYAML: Configuration file management
 - joblib: Model serialization
-- pathlib: Path handling
+- pathlib: Cross platform path handling
+- python-dotenv: Environment variable management
 
 **Additional Tools**
 - argparse: Command-line interfaces
 - logging: Application logging
 - pickle: Object serialization
+- tqdm: Progress bars
 
 ## Configuration
 Project setting are managed in `config/config.yaml`
@@ -743,7 +782,7 @@ dvc:
     tag_prefix: v
 
 ```
-MOdify this code to adjust project behaviour without changing code.
+Make sure to modify this code to adjust project behaviour without changing code.
 
 ## Contributing
 
@@ -772,6 +811,8 @@ All team members contributed equally to different aspects of the project followi
 - MLflow Documentation - https://mlflow.org/docs/latest/index.html
 - DVC Documentation - https://dvc.org/doc
 - Scikit-learn Pipelines - https://scikit-learn.org/stable/modules/compose.html
+- AWS S3 Documentation - https://docs.aws.amazon.com/s3/
+- DVC with S3: https://dvc.org/doc/user-guide/data-management/remote-storage/amazon-s3
 
 
 
