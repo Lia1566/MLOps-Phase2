@@ -42,11 +42,11 @@ ENV/
 #*.csv
 
 # Model files (too large for GitHub)
-models/*.pkl
-models/*.joblib
-models/*.h5
-*.pkl
-*.joblib
+#models/*.pkl
+#models/*.joblib
+#models/*.h5
+#*.pkl
+#*.joblib
 
 # MLflow
 mlruns/
@@ -80,11 +80,11 @@ __pycache__/
 *~
 
 # Keep directory structure but ignore contents
-data/raw/.keep
-data/processed/.keep
-data/external/.keep
-models/.keep
-reports/figures/.keep
+#data/raw/.keep
+#data/processed/.keep
+#data/external/.keep
+#models/.keep
+#reports/figures/.keep
 
 # Google Cloud credentials (DO NOT COMMIT)
 gdrive-credentials.json
