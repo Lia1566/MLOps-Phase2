@@ -91,6 +91,7 @@ Fase 2/
 │   ├── baseline_results.csv    # Baseline model results
 │   ├── pipeline_baseline_results.csv  # Pipeline model results
 │   ├── tuning_results.csv      # Hyperparameter tuning results
+│   └── Phase2-Report                 
 │   └── *.csv                   # Analysis report
 │
 ├── mlruns/                     # MLflow experiment tracking
@@ -178,7 +179,7 @@ Fase 2/
 |-----------|-----------|-----------| 
 | Estaban Hidekel Solares Orozco | DevOps Engineer | CI/CD setup, infrastructure management, DVC configuration, version control |
 | Jesús Antonio López Wayas | Software Engineer | Code refactorization, modular architecture, code quality, testing | 
-| Natalia Nevarez Tinoco | Data Engineer | Data pipeline, preprocessing, feature engineering, data quality |
+| Natalia Nevarez Tinoco | Data Engineer | Data pipeline, preprocessing, feature engineering, data quality, Github repository and documentation |
 | Roberto López Baldomero | ML Engineer | Model training, hyperparameter tuning, pipeline implementation, MLflow setup | 
 | Yander Alec Ortega Rosales | Data Scientist | EDA, model selection, evaluation metrics, results analysis | 
 
