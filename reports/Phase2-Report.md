@@ -12,19 +12,22 @@
 ## 1. Code Refactorization
 ### 1.1 Before - Monolithic Notebook Structure
 
-On Phase 1, we has a single Jupyter Notebook (`mlops-eq16_notebooks_phase1_team16.ipynb`), which had more than 500 lines of code and all functionality in one place.
-Furthermore, ut was difficult to reuse the code, as well as hard to test or maintain. We had to do manual tracking of results. 
+In Phase 1, we had a single monolithic Jupyter Notebook that contained the entire ML workflow in one file. All data loading, preprocessing, feature engineering, model training, and evaluation logic was combined together without clear separation.
+This monolithic structure presented several critical challenges:
 
-We identified several problems, such as:
-- Code duplication across cells
-- Hardcoded file paths
-- No separation of concerns
-- Difficult collaboration
-- Can't reproduce results reliably
-- No automated testing
-- Mixed data processing and model training
+- Code duplication: Repeated logic across different notebook cells
+- Hardcoded file paths: No centralized configuration
+- No separation of concerns: All functionality mixed together
+- Difficult collaboration: Jupyter notebooks create merge conflicts
+- Poor reproducibility: Cell execution order matters
+- No automated testing: Manual verification only
+- No experiment tracking: Results recorded manually in cells
+- Not production-ready: Cannot deploy notebook code directly
 
 ### 1.2 After - Modular Architecture
+
+In Phase 2, we transformed the monolithic notebook into a professional, modular codebase with clear separation of concerns. The src/ directory now contains specialized modules: data/ for loading and preprocessing, features/ for engineering, models/ for training and evaluation, visualization/ for plotting, and utils/ for configuration. The scripts/ directory provides executable entry points that orchestrate these modules into complete workflows.
+This architecture brings significant improvements: code is now reusable (modules can be imported anywhere), testable (each component isolated), maintainable (changes localized), and production-ready (follows software engineering best practices). The structure makes collaboration easier, enables automated testing, and allows the ML workflow to scale efficiently.
 
 New structure:
 
