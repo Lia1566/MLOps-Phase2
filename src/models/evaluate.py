@@ -11,6 +11,9 @@ from typing import Dict, Tuple, Optional, Any
 from pathlib import Path
 import json
 from datetime import datetime
+import mlflow
+import matplotlib.pyplot as plt 
+import seaborn as sns
 
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
@@ -200,6 +203,112 @@ def get_precision_recall_curve_data(
     
     return precision, recall, thresholds, avg_precision
 
+def plot_and_log_confusion_matrix(
+    y_true: np.ndarray, 
+    y_pred: np.ndarray, 
+    class_names: list = ['Lower Performance', 'High Performance']
+) -> None:
+    """
+    Create confusion matrix plot and log it to MLflow
+    
+    Args:
+        y_true: True labels
+        y_pred: Predicted labels
+        class_names: Names of the classes
+    """
+    try:
+        # Calculate confusion matrix
+        cm = confusion_matrix(y_true, y_pred)
+        # Create figure 
+        fig, ax = plt.subplots(figsize=(10, 8))
+        # Plot heatmap
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                    xticklabels=class_names, yticklabels=class_names, 
+                    cbar=True, ax=ax, 
+                    annot_kws={'size': 16, 'weight':'bold'})
+        # Labels
+        ax.set_xlabel('Predicted Label', fontsize=14, fontweight='bold')
+        ax.set_ylabel('True Label', fontsize=14, fontweight='bold')
+        ax.set_title('Confusion Matrix', fontsize=16, fontweight='bold', pad=20)
+        
+        # Add metrics text
+        accuracy = np.trace(cm) / np.sum(cm)
+        tn, fp, fn, tp = cm.ravel()
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+        
+        metrics_text = f'Acc: {accuracy:.3f} | Prec: {precision:.3f} | Rec: {recall:.3f} | F1: {f1:.3f}'
+        ax.text(0.5, -0.12, metrics_text,
+               ha='center', va='center', transform=ax.transAxes,
+               fontsize=12, bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        
+        plt.tight_layout()
+        
+        # Log to MLflow
+        mlflow.log_figure(fig, 'confusion_matrix.png')
+        
+        # lso save locally
+        reports_dir = Path('reports/figures')
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        fig.savefig(reports_dir / 'confusion_matrix.png', dpi=300, bbox_inches='tight')
+        
+        plt.close(fig)
+        print("✓ Confusion matrix logged to MLflow")
+        
+    except Exception as e:
+        print(f"Warning: Could not log confusion matrix: {e}")
+        
+def plot_and_log_roc_curve(
+    y_true: np.ndarray, 
+    y_pred_proba: np.ndarray
+
+) -> None:
+    """ 
+    Create ROC curve plot and log figure to MLflow
+    Args:
+        y_true: True labels
+        y_pred_proba: Predicted probabilities for positive class
+    """
+    try:
+        # Calculate ROC curve
+        fpr, tpr, thresholds = roc_curve(y_true, y_pred_proba)
+        roc_auc = roc_auc_score(y_true, y_pred_proba)
+        # Create figure
+        fig, ax = plt.subplots(figsize=(10, 8))
+        # Plot ROC curve
+        ax.plot(fpr, tpr, color='darkorange', lw=3,
+               label=f'ROC Curve (AUC = {roc_auc:.3f})')
+        ax.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--',
+               label='Random Classifier')
+        # Styling
+        ax.set_xlim([0.0, 1.0])
+        ax.set_ylim([0.0, 1.05])
+        ax.set_xlabel('False Positive Rate', fontsize=14, fontweight='bold')
+        ax.set_ylabel('True Positive Rate', fontsize=14, fontweight='bold')
+        ax.set_title('ROC Curve', fontsize=16, fontweight='bold', pad=20)
+        ax.legend(loc="lower right", fontsize=12)
+        ax.grid(alpha=0.3, linestyle='--')
+        # Add AUC text
+        ax.text(0.6, 0.2, f'AUC = {roc_auc:.3f}',
+               fontsize=14, fontweight='bold',
+               bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        
+        plt.tight_layout()
+        # Log to MLflow
+        mlflow.log_figure(fig, 'roc_curve.png')
+        # Also save locally
+        reports_dir = Path('reports/figures')
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        fig.savefig(reports_dir / 'roc_curve.png', dpi=300, bbox_inches='tight')
+        
+        plt.close(fig)
+        print("✓ ROC curve logged to MLflow")
+        
+    except Exception as e:
+        print(f"Warning: Could not log ROC curve: {e}")
+
+
 
 def evaluate_model(
     model: Any,
@@ -259,6 +368,15 @@ def evaluate_model(
             }
         except:
             pass
+    
+    try:
+        plot_and_log_confusion_matrix(y_test, y_pred, target_names)
+        
+        if y_pred_proba is not None:
+            plot_and_log_roc_curve(y_test, y_pred_proba)
+    except Exception as e:
+        # Fail silently if not in MLflow run context
+        pass
     
     # Compile results
     results = {

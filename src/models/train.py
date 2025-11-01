@@ -24,6 +24,7 @@ from sklearn.metrics import (
     accuracy_score, precision_score, recall_score,
     f1_score, roc_auc_score, make_scorer
 )
+from src.models.evaluate import plot_and_log_confusion_matrix, plot_and_log_roc_curve
 
 
 def get_baseline_models(random_state: int = 42) -> Dict[str, Any]:
@@ -191,6 +192,15 @@ def train_baseline_models(
             
             # Evaluate on test set
             test_metrics = evaluate_model(trained_model, X_test, y_test)
+            
+            # Generate predictions for plotting
+            y_pred = trained_model.predict(X_test)
+            y_pred_proba = trained_model.predict_proba(X_test)[:, 1] if hasattr(trained_model, 'predict_proba') else None
+            
+            # Log confusion matrix and ROC curve
+            plot_and_log_confusion_matrix(y_test, y_pred)
+            if y_pred_proba is not None:
+                plot_and_log_roc_curve(y_test, y_pred_proba)
             
             # Log parameters
             if hasattr(trained_model, 'get_params'):
@@ -392,6 +402,15 @@ def tune_top_models(
             
             # Evaluate on test set
             test_metrics = evaluate_model(best_model, X_test, y_test)
+            
+            # Generate predictions for plotting
+            y_pred = best_model.predict(X_test)
+            y_pred_proba = best_model.predict_proba(X_test)[:, 1] if hasattr(best_model, 'predict_proba') else None
+            
+            # Log confusion matrix and ROC curve
+            plot_and_log_confusion_matrix(y_test, y_pred)
+            if y_pred_proba is not None:
+                plot_and_log_roc_curve(y_test, y_pred_proba)
             
             # Log parameters
             mlflow.log_params(best_params)
