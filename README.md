@@ -79,7 +79,7 @@ Fase 2/
 │   └── track_data_dvc.sh
 │
 ├── models/                     # Saved trained models (*.pkl, DVC tracked)
-├── notebooks/
+├── notebooks/                  # Jupyter notebooks (Phase 1)
 │   ├── 01_data_exploration.ipynb
 │   ├── 02_data_preprocessing.ipynb
 │   ├── 03_data_versioning.ipynb
