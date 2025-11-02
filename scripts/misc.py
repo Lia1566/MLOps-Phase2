@@ -2,7 +2,14 @@
 A list of miscelaneous functions
 """
 from IPython.display import HTML
+import pandas as pd
 
+_strong = '<strong>{}</strong>'
+_break = '<hr><br>'
+
+# ---
+# EXPLORATORY DATA ANALYSIS
+# ---
 
 def describe_dataframe(df):
     """
@@ -13,7 +20,7 @@ def describe_dataframe(df):
 
     _strong = '<strong>{}</strong>'
     _break = '<hr><br>'
-
+    
     # Get basic information of the dataset
     display(HTML('<strong>Basic information<strong>'), HTML('<br>'))
     print(f'Dataset Shape: {df.shape}')
@@ -33,5 +40,84 @@ def describe_dataframe(df):
     display(df.describe(include='all'))
     display(HTML(_break))
 
+
+def get_missing_values(df):
+    """
+    A function that takes a dataframe and returns the number of missing values.
+
+    df: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+
+    display(HTML('<strong>Missing Values Analysis</strong>'))
+
+    # Get the missing count
+    missing = df.isnull().sum()
+    missing_pct = (df.isnull().sum() / len(df)) * 100
+    missing_df = pd.DataFrame({
+        'Missing_Count': missing,
+        'Percentage': missing_pct
+    })
+
+    print(missing_df)
+    print(f'\nTotal missing values: {missing.sum()}')
+
+
+def get_duplicates_info(df):
+    """
+    A function that looks for duplicate information.
+
+    df: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+
+    display(HTML('<strong>Duplicate Analysis</strong>'))
+    print(f'Number of duplicate rows: {df.duplicated().sum()}')
+    print(f'Percentage of duplicate rows: {(df.duplicated().sum() / len(df)) * 100:.2f}%')
+
+
+def get_unique_values_per_columns(df):
+    """
+    A function that returns the unique values per column.
+
+    df: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+    
+    display(HTML('<strong>Unique Values per Columns</strong>'))
+    for col in df.columns:
+        print(f"\n{col}:")
+        print(f"  Unique values: {df[col].nunique()}")
+        print(f"  Values: {df[col].unique()[:10]}")  # Show first 10
+
+
+def get_value_counts_per_columns(df):
+    """
+    A function that returns the value counts for each of the categorical column,
+    df: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+
+    display(HTML('<strong>Value Counts for Each Column<strong>'))
+    for col in df.columns:
+        print(f"\n{'='*80}")
+        print(f"{col.upper()}")
+        print(f"{'='*80}")
+        print(df[col].value_counts())
+        print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     
         
