@@ -93,8 +93,8 @@ stages:
     deps:
     - path: config/config.yaml
       hash: md5
-      md5: b65f0e8f597b3fde80462b9d7fa12d9e
-      size: 4441
+      md5: 6a2e7891da5f50217a828259dd8648bd
+      size: 4431
     - path: data/processed/student_performance_test.csv
       hash: md5
       md5: 42d099681bf0648723dfe47d4df20923
@@ -109,16 +109,16 @@ stages:
       size: 15501
     - path: src/models/evaluate.py
       hash: md5
-      md5: 43bf2a13e1007908d9aaf60cb2eb4246
-      size: 14564
+      md5: d38ae02bee5500552980ad5f6714055d
+      size: 18925
     - path: src/models/pipeline.py
       hash: md5
       md5: 1704ca8cb77be06786e24e9f1a131624
       size: 16302
     - path: src/models/train.py
       hash: md5
-      md5: 69a27ee3188d463a801036a5dfd1c29f
-      size: 14775
+      md5: 57b2743778694c60039c9e70f4ae75db
+      size: 15764
     params:
       params.yaml:
         training.baseline_models:
@@ -144,8 +144,8 @@ stages:
     deps:
     - path: config/config.yaml
       hash: md5
-      md5: b65f0e8f597b3fde80462b9d7fa12d9e
-      size: 4441
+      md5: 6a2e7891da5f50217a828259dd8648bd
+      size: 4431
     - path: data/processed/student_performance_test.csv
       hash: md5
       md5: 42d099681bf0648723dfe47d4df20923
@@ -164,12 +164,12 @@ stages:
       size: 15496
     - path: src/models/evaluate.py
       hash: md5
-      md5: 43bf2a13e1007908d9aaf60cb2eb4246
-      size: 14564
+      md5: d38ae02bee5500552980ad5f6714055d
+      size: 18925
     - path: src/models/train.py
       hash: md5
-      md5: 69a27ee3188d463a801036a5dfd1c29f
-      size: 14775
+      md5: 57b2743778694c60039c9e70f4ae75db
+      size: 15764
     params:
       params.yaml:
         models:
