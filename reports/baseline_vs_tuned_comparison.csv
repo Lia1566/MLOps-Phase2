@@ -1,4 +1,0 @@
-Model,Baseline Accuracy,Tuned Accuracy,Improvement
-SVM,0.736,0.72,-0.016000000000000014
-Logistic Regression,0.712,0.712,0.0
-Random Forest,0.696,0.68,-0.015999999999999903
