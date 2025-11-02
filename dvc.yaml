@@ -61,7 +61,7 @@ stages:
       - reports/pipeline_baseline_results.csv:
           cache: false
 
-  # Stage 4: Hyperparameter Tuning (Optional - run manually)
+  # Stage 4: Hyperparameter Tuning 
   train_tuning:
     cmd: python scripts/train_model.py --mode tuning --top-n 3 --track-with-dvc
     deps:
@@ -82,6 +82,19 @@ stages:
     metrics:
       - reports/tuning_results.csv:
           cache: false
+
+  # Stage 5: Get Feature Importance
+  feature_importance:
+    cmd: python scripts/get_feature_importance.py --track-with-dvc
+    deps:
+      - scripts/get_feature_importance.py
+      - data/processed/student_performance_test.csv
+      - models/best_model_baseline.pkl
+    outs:
+      - reports/feature_importance.csv
+      - reports/figures/feature_importance.png
+    params:
+      - training.random_state
 
 
 
