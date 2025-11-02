@@ -2,3 +2,5 @@
 /student_performance_test.csv
 /feature_names.txt
 /preprocessing_info.txt
+data/processed/*.csv
+data/processed/*.txt
