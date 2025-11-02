@@ -101,9 +101,8 @@ with mlflow.start_run(run_name='feature_importance'):
     plt.tight_layout()
 
     # Save plot
-    from datetime import datetime
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    plot_path = f'reports/figures/feature_importance_{timestamp}.png'
+    plot_path = 'reports/figures/feature_importance.png'
+    plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     print(f"Plot saved to: {plot_path}")
 
