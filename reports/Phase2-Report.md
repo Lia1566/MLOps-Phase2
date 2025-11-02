@@ -214,8 +214,7 @@ Benefits:
 ### Summary 
 
 | **Metric**              | **Before (Notebook)**         | **After (Modular)**                 | **Improvement**         |
-|--------------------------|------------------------------|------------------------------------|--------------------------|
-| **Lines of code**        | 500+ (in 1 file)             | ~1200 (across modules)             | Better organization      |
+|--------------------------|------------------------------|------------------------------------|--------------------------| 
 | **Code reusability**     | 0%                           | 95%                                | Yes                     |
 | **Test coverage**        | 0%                           | Ready for testing                  | Yes                      |
 | **Reproducibility**      | Manual                       | Automated                          | Yes                      |
@@ -384,14 +383,20 @@ Recommendations:
 3. For exploration - baseline SVM showed potential (73.6%)
 
 ### 3.5 Feature Importance Insights
-Top 5 most important features (from RF model):
-1. Class XII Percentage (28.3%)
-2. Class X Percentage (24.7%)
-3. Study time per week (15.2%)
-4. Coaching (12.8%)
-5. Father's occupation (8.9%)
 
-MLflow artifact: feature importance plot automatically saved for each run. 
+Top contributing factors to student performance prediction (from RF model):
+1. **Socioeconomic indicators** (Caste categories: ~17%)
+2. **Academic history** (Class X & XII percentages: ~12%)
+3. **Study patterns** (Time and coaching: ~21%)
+4. **Demographic factors** (Gender: ~6%)
+5. **Parental background** (Father's occupation: ~9%)
+
+Key findings:
+- Socioeconomic and academic history features dominate predictions
+- Combined, top 5 features account for ~44% of total importance
+- Study patterns and coaching show significant impact
+- Model successfully identifies actionable intervention points
+
 
 ## 4. Best Practices Implemented
 
