@@ -28,6 +28,84 @@ def get_relevant_paths(ROOT):
     print(f'Figures: {FIGS}')
 
     return DATA_RAW, DATA_PROC, FIGS
+
+# ---
+# PREPROCESSING
+# ---
+def drop_duplicates(df):
+    """
+    A function that takes a dataframe and drops the duplicates, returns a cleaned dataframe
+    with no duplicates.
+
+    dataframe: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+    display(HTML('<strong>Drop duplicates</strong>'))
+    print(f"\nOriginal dataset shape: {df.shape}")
+    print(f"Number of duplicate rows: {df.duplicated().sum()}")
+    
+    # Remove duplicates
+    df_clean = df.copy().drop_duplicates()
+    
+    print(f"After removing duplicates: {df_clean.shape}")
+    print(f"Rows removed: {df.shape[0] - df_clean.shape[0]}")
+    print(f"Percentage removed: {((df.shape[0] - df_clean.shape[0]) / df.shape[0] * 100):.2f}%")
+    
+    # Verify no missing values
+    print(f"\nMissing values check:")
+    print(df_clean.isnull().sum().sum())
+    print("✓ No missing values" if df_clean.isnull().sum().sum() == 0 else "Missing values found")
+
+    return df_clean
+
+
+def create_binary_target(df):
+    """
+    A funciton that takes a dataframe and adds a new column with a transformed binary
+    target from a text-like to numerical.
+
+    dataframe: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+
+    display(HTML('<strong>Create Binary Target Variable</strong>'))
+    def _create_binary_target(performance):
+        """
+        Convert 4-class performance to binary
+        - Excellent, Vg  → 1 (High Performance)
+        - Good, Average → 0 (Lower Performance)
+        """
+        if performance in ['Excellent', 'Vg']:
+            return 1 # High performance
+        else:
+            return 0 # Lower performance
+
+    # Create a copy of the curreint input dataframe
+    df_clean = df.copy()
+
+    # Original Performance distribution
+    print("\nOriginal Performance Distribution:")
+    print(df_clean['Performance'].value_counts())
+    print("\nPercentages:")
+    print(df_clean['Performance'].value_counts(normalize=True).mul(100).round(2))
+    
+    # Create bianry target varibale
+        
+    df_clean['Performance_Binary'] = df_clean['Performance'].apply(_create_binary_target)
+    
+    # Check binary distribution
+    print(f"\n{'='*80}")
+    print("Binary Performance Distribution:")
+    print(f"{'='*80}")
+    print(df_clean['Performance_Binary'].value_counts())
+    print("\nClass Balance:")
+    balance = df_clean['Performance_Binary'].value_counts(normalize=True).mul(100).round(2)
+    print(balance)
+    
+    print(f"\nClass 0 (Lower Performance): {balance[0]}%")
+    print(f"Class 1 (High Performance): {balance[1]}%")
+    print(f"Balance Ratio: {balance[0]/balance[1]:.2f}:1")
+
+    return df_clean
+
     
 # ---
 # EXPLORATORY DATA ANALYSIS
