@@ -3,10 +3,32 @@ A list of miscelaneous functions
 """
 from IPython.display import HTML
 import pandas as pd
+import os
+import sys
 
 _strong = '<strong>{}</strong>'
 _break = '<hr><br>'
 
+def get_relevant_paths(ROOT):
+    """
+    Based on the ROOT path, then return relevant paths for the flow.
+    """
+    # Set the paths for relevant data
+    DATA_RAW = os.path.join(ROOT, "data", "raw")
+    DATA_PROC = os.path.join(ROOT, "data", "processed")
+    FIGS = os.path.join(ROOT, "reports", "figures")
+
+    # Create output directories 
+    for path in [DATA_PROC, FIGS]:
+        os.makedirs(path, exist_ok=True)
+
+    print(f'Project Root: {ROOT}')
+    print(f'Raw Data: {DATA_RAW}')
+    print(f'Processed Data: {DATA_PROC}')
+    print(f'Figures: {FIGS}')
+
+    return DATA_RAW, DATA_PROC, FIGS
+    
 # ---
 # EXPLORATORY DATA ANALYSIS
 # ---
