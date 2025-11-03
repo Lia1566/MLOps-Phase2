@@ -32,6 +32,77 @@ def get_relevant_paths(ROOT):
 # ---
 # PREPROCESSING
 # ---
+
+def encode_nominal_values(df, nominal_columns):
+    """
+    Encode the categorical values that are nominal i.e. the category doesn't have any hierarchy.
+
+    dataframe: The dataframe to describe. Expects a pandas-like dataframe.
+    columns: The list of nominal columns.
+    """
+
+    # Get a copy
+    df_encoded = df.copy()
+    
+    display(HTML('<strong>Encode the nominal variables</strong>'))
+    
+    print(f"\nNominal columns for one-hot encoding: {len(nominal_columns)}")
+    for col in nominal_columns:
+        print(f"  - {col}: {df_encoded[col].nunique()} unique values")
+    
+    # Apply one-hot encoding
+    df_encoded = pd.get_dummies(df_encoded, columns=nominal_columns, drop_first=True)
+    
+    print(f"\n✓ One-hot encoding complete")
+    print(f"Dataset shape after encoding: {df_encoded.shape}")
+    
+    # Show sample of encoded columns
+    print("\nSample of encoded feature columns:")
+    encoded_cols = [col for col in df_encoded.columns if any(x in col for x in nominal_columns)]
+    for i, col in enumerate(encoded_cols[:15], 1):
+        print(f"  {i:2d}. {col}")
+    if len(encoded_cols) > 15:
+        print(f"  ... and {len(encoded_cols)-15} more")
+
+    return df_encoded
+
+
+
+def encode_ordinal_values(df):
+    """
+    Encode the categorical features so that instead of having text-like columns
+    have numerical-like that an ML algorithm can understand.
+
+    dataframe: The dataframe to describe. Expects a pandas-like dataframe.
+    """
+
+    
+    display(HTML('<strong>Encode ordinal values</strong>'))
+
+    # Get a copy of the current dataframe
+    df_encoded = df.copy()
+    
+    # Define ordinal mappings
+    grade_mapping = {'Average': 1, 'Good': 2, 'Vg': 3, 'Excellent': 4}
+    time_mapping = {'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR_PLUS': 4}
+
+    print("\nOrdinal Encoding Mappings:")
+    print(f"Grades: {grade_mapping}")
+    print(f"Time: {time_mapping}")
+    
+    # Apply ordinal encoding
+    df_encoded['Class_X_Grade_Encoded'] = df_encoded['Class_X_Percentage'].map(grade_mapping)
+    df_encoded['Class_XII_Grade_Encoded'] = df_encoded['Class_XII_Percentage'].map(grade_mapping)
+    df_encoded['Study_Time_Encoded'] = df_encoded['time'].map(time_mapping)
+    
+    print("\nOrdinal encoding applied to:")
+    print("- Class_X_Percentage → Class_X_Grade_Encoded")
+    print("- Class_XII_Percentage → Class_XII_Grade_Encoded")
+    print("- time → Study_Time_Encoded")
+
+    return df_encoded
+        
+
 def drop_duplicates(df):
     """
     A function that takes a dataframe and drops the duplicates, returns a cleaned dataframe
