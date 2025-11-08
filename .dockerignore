@@ -1,0 +1,76 @@
+# .dockerignore
+# Files and directories to exclude from Docker image
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+tests/
+*_test.py
+test_*.py
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# DVC
+.dvc/
+*.dvc
+.dvcignore
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Documentation
+docs/
+*.md
+README.md
+LICENSE
+
+# Data directories (too large for image)
+data/raw/
+data/processed/
+notebooks/
+reports/
+scripts/
+
+# Development files
+requirements-dev.txt
+requirements-full.txt
+pytest.ini
+.env
+docker-compose.override.yml
+
+# CI/CD
+.github/
+.gitlab-ci.yml

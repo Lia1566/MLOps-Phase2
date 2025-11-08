@@ -1,0 +1,20 @@
+# Minimal Production Dependencies for Docker
+# Optimized for FastAPI API deployment
+
+# Core ML Libraries
+scikit-learn==1.3.2
+pandas==2.1.4
+numpy==1.26.2
+joblib==1.3.2
+
+# FastAPI and Server
+fastapi==0.115.0
+uvicorn[standard]==0.25.0
+pydantic==2.10.3
+python-multipart==0.0.6
+
+# Configuration
+pyyaml==6.0.1
+
+# Logging
+python-json-logger==2.0.7

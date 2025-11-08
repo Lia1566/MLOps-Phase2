@@ -1,0 +1,29 @@
+# Development and Testing Dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Testing Framework
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+pytest-xdist==3.5.0
+
+# Code Quality
+black==23.12.1
+flake8==6.1.0
+isort==5.13.2
+pylint==3.0.3
+
+# FastAPI Testing (compatible versions)
+httpx==0.25.2
+fastapi==0.108.0
+pydantic==1.10.13
+
+# Additional Testing Tools
+faker==22.0.0
+pytest-timeout==2.2.0
+pytest-env==1.1.3
+
+# Monitoring and Drift Detection Testing
+scipy==1.11.4
+# evidently - commented out for now, will add in Phase 3 when needed
+# evidently==0.4.12
