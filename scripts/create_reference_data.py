@@ -42,7 +42,7 @@ def create_reference_data(n_samples=1000):
     output_path = output_dir / 'reference_data.csv'
     df.to_csv(output_path, index=False)
     
-    print(f"✅ Reference data saved to: {output_path}")
+    print(f"Reference data saved to: {output_path}")
     print(f"   Shape: {df.shape}")
     print(f"\nSample statistics:")
     print(df.describe())

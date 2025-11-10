@@ -298,3 +298,64 @@ def ensure_test_model(project_root):
         
         model_path.parent.mkdir(exist_ok=True)
         joblib.dump(pipeline, model_path)
+        
+        
+# Fast API Test Fixtures
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_model():
+    """
+    Ensure model exists for API testing.
+    This runs once before all tests.
+    """
+    from pathlib import Path
+    import joblib
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import Pipeline
+    
+    model_path = Path("models/pipeline_baseline.pkl")
+    
+    # If model exists, we're good
+    if model_path.exists():
+        print(f"Test model found at: {model_path}")
+        yield
+        return
+    
+    # Otherwise, create a test model
+    print(f"Creating test model at: {model_path}")
+    model_path.parent.mkdir(exist_ok=True)
+    
+    # Create simple pipeline
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('classifier', LogisticRegression(random_state=42, max_iter=1000))
+    ])
+    
+    # Fit with dummy data (9 features to match expected input)
+    X_dummy = np.random.randn(100, 9)
+    y_dummy = np.random.randint(0, 2, 100)
+    pipeline.fit(X_dummy, y_dummy)
+    
+    # Save
+    joblib.dump(pipeline, model_path)
+    print(f"Test model created successfully!")
+    
+    yield
+    
+    # Cleanup is optional - you might want to keep the model
+
+
+@pytest.fixture(scope="session")
+def sample_api_request():
+    """Sample API request for testing."""
+    return {
+        "Class_X_Percentage": 85.5,
+        "Class_XII_Percentage": 78.0,
+        "Study_Hours": 5.0,
+        "Gender": "Male",
+        "Caste": "General",
+        "Coaching": "Yes",
+        "Medium": "English"
+    }

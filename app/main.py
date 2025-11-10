@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import logging
 from typing import Dict, Any
+from contextlib import asynccontextmanager
 import time
 
 from app.config import config
@@ -32,6 +33,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown."""
+    global model, startup_time
+    
+    # Startup
+    logger.info("Starting up API...")
+    startup_time = time.time()
+    try:
+        model = get_model()
+        logger.info(f"✓ Model loaded: {model.model_loaded}")
+    except Exception as e:
+        logger.error(f"✗ Model load failed: {e}")
+        model = None
+    
+    yield  # App is running
+    
+    # Shutdown
+    logger.info("Shutting down API...")
+
 # Create FastAPI app
 app = FastAPI(
     title=config.API_TITLE,
@@ -39,7 +60,8 @@ app = FastAPI(
     version=config.API_VERSION,
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json", 
+    lifespan=lifespan
 )
 
 # Add CORS middleware
@@ -53,33 +75,6 @@ app.add_middleware(
 
 # Global model instance
 model: ModelInference = None
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Load model on startup."""
-    global model, startup_time
-    try:
-        logger.info("Starting up API...")
-        model = get_model()
-        logger.info("Model loaded successfully on startup!")
-        
-        # Initialize drift detector
-        try:
-            drift_detector = get_drift_detector()
-            logger.info("Drift detector initialized")
-        except Exception as e:
-            logger.warning(f"Drift detector initialization failed: {e}")
-    except Exception as e:
-        logger.error(f"Failed to load model on startup: {str(e)}")
-        logger.warning("API will start but predictions will fail until model is loaded")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown."""
-    logger.info("Shutting down API...")
-
 
 @app.get("/", tags=["General"])
 async def root():

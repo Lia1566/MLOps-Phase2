@@ -34,10 +34,29 @@ class TestFastAPIEndpoints:
     """Test suite for FastAPI endpoints."""
     
     @pytest.fixture(scope="class")
-    def client(self):
-        """Create test client."""
+    def client(self, setup_test_model):
+        """Create test client with model loaded."""
         if APP_AVAILABLE:
-            return TestClient(app)
+            from fastapi.testclient import TestClient
+            from app.main import app
+            from app import main as app_module
+        
+            # Create client
+            client = TestClient(app)
+        
+            # Manually trigger model loading
+            import asyncio
+            from pathlib import Path
+        
+            # Force model load by calling get_model
+            try:
+                from app.inference import get_model
+                app_module.model = get_model()
+                print(f"✓ Model loaded for tests: {app_module.model.model_loaded}")
+            except Exception as e:
+                print(f"✗ Failed to load model: {e}")
+        
+            return client
         return None
     
     def test_health_endpoint(self, client):
@@ -106,10 +125,29 @@ class TestAPIPerformance:
     """Test API performance."""
     
     @pytest.fixture(scope="class")
-    def client(self):
-        """Create test client."""
+    def client(self, setup_test_model):
+        """Create test client with model loaded."""
         if APP_AVAILABLE:
-            return TestClient(app)
+            from fastapi.testclient import TestClient
+            from app.main import app
+            from app import main as app_module
+        
+            # Create client
+            client = TestClient(app)
+        
+            # Manually trigger model loading
+            import asyncio
+            from pathlib import Path
+        
+            # Force model load by calling get_model
+            try:
+                from app.inference import get_model
+                app_module.model = get_model()
+                print(f"✓ Model loaded for tests: {app_module.model.model_loaded}")
+            except Exception as e:
+                print(f"✗ Failed to load model: {e}")
+        
+            return client
         return None
     
     def test_prediction_latency(self, client, sample_api_request):
@@ -156,10 +194,29 @@ class TestAPIErrorHandling:
     """Test API error handling."""
     
     @pytest.fixture(scope="class")
-    def client(self):
-        """Create test client."""
+    def client(self, setup_test_model):
+        """Create test client with model loaded."""
         if APP_AVAILABLE:
-            return TestClient(app)
+            from fastapi.testclient import TestClient
+            from app.main import app
+            from app import main as app_module
+        
+            # Create client
+            client = TestClient(app)
+        
+            # Manually trigger model loading
+            import asyncio
+            from pathlib import Path
+        
+            # Force model load by calling get_model
+            try:
+                from app.inference import get_model
+                app_module.model = get_model()
+                print(f"✓ Model loaded for tests: {app_module.model.model_loaded}")
+            except Exception as e:
+                print(f"✗ Failed to load model: {e}")
+        
+            return client
         return None
     
     def test_invalid_method(self, client):
@@ -205,10 +262,29 @@ class TestAPIDocumentation:
     """Test API documentation endpoints."""
     
     @pytest.fixture(scope="class")
-    def client(self):
-        """Create test client."""
+    def client(self, setup_test_model):
+        """Create test client with model loaded."""
         if APP_AVAILABLE:
-            return TestClient(app)
+            from fastapi.testclient import TestClient
+            from app.main import app
+            from app import main as app_module
+        
+            # Create client
+            client = TestClient(app)
+        
+            # Manually trigger model loading
+            import asyncio
+            from pathlib import Path
+        
+            # Force model load by calling get_model
+            try:
+                from app.inference import get_model
+                app_module.model = get_model()
+                print(f"✓ Model loaded for tests: {app_module.model.model_loaded}")
+            except Exception as e:
+                print(f"✗ Failed to load model: {e}")
+        
+            return client
         return None
     
     def test_openapi_schema(self, client):
